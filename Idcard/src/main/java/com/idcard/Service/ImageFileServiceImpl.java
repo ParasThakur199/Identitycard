@@ -18,7 +18,7 @@ import com.idcard.Payload.Login_Token_DTO;
 import com.idcard.Repository.ImageFileRepository;
 import com.idcard.config.JwtService;
 import com.idcard.exception.ResourceNotFoundException;
-import com.spring.medleaper.config.JwtHelper;
+
 
 @Service
 public class ImageFileServiceImpl implements ImageFileService {
