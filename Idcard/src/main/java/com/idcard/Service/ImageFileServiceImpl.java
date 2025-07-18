@@ -20,59 +20,72 @@ import com.idcard.config.JwtService;
 import com.idcard.exception.ResourceNotFoundException;
 import com.spring.medleaper.config.JwtHelper;
 
-
 @Service
 public class ImageFileServiceImpl implements ImageFileService {
 
 	@Autowired
-	private ImageFileRepository imageFileRepository; 
-	
+	private ImageFileRepository imageFileRepository;
+
 	@Autowired
 	private JwtService helper;
-	
+
 	@Override
-	public String saveImageFile(String tokenHeader ,List<ImageFileDTO> dtoList) {
+	public String saveImageFile(String tokenHeader, List<ImageFileDTO> dtoList) {
 		final UserEntity claims2 = helper.getUserDetailsFromToken(tokenHeader);
 		String status = "0";
-		 List<ImageFileEntity> entities = dtoList.stream().map(dto -> {
-		        try {
-		            ImageFileEntity entity = new ImageFileEntity();
-		            entity.setFileName(dto.getFileName());
-		            entity.setFileType(dto.getFileType());
-		            entity.setFileData(dto.getFileData().getBytes());
-		            entity.setCreateDate(Juleandate.getCurrentDateTime());
-		            entity.setCreateUser(claims2.getUsername());
-		            return entity;
-		        } catch (Exception e) {
-		            throw new ResourceNotFoundException("Image not saved");
-		        }
-		    }).toList();
+		List<ImageFileEntity> entities = dtoList.stream().map(dto -> {
+			try {
+				Optional<ImageFileEntity> byId = imageFileRepository.findById(dto.getId());
+				if (byId.isPresent()) {
+					ImageFileEntity entity = byId.get();
+					entity.setFileName(dto.getFileName());
+					entity.setFileType(dto.getFileType());
+					entity.setStatus(dto.isStatus());
+					entity.setFileData(dto.getFileData().getBytes());
+					entity.setUpdateDate(Juleandate.getCurrentDateTime());
+					entity.setUpdateUser(claims2.getUserId());
+					return entity;
+				} else {
+					ImageFileEntity entity = new ImageFileEntity();
+					entity.setFileName(dto.getFileName());
+					entity.setFileType(dto.getFileType());
+					entity.setStatus(dto.isStatus());
+					entity.setFileData(dto.getFileData().getBytes());
+					entity.setCreateDate(Juleandate.getCurrentDateTime());
+					entity.setCreateUser(claims2.getUserId());
+					return entity;
+				}
+			} catch (Exception e) {
+				throw new ResourceNotFoundException("Image not saved");
+			}
+		}).toList();
 
-		 imageFileRepository.saveAll(entities);
-		 status = "1";
+		imageFileRepository.saveAll(entities);
+		status = "1";
 		return status;
 	}
 
 	@Override
 	public Map<String, List<ImageFileGetDTO>> getAllImageFile() {
 		List<ImageFileEntity> findAllData = imageFileRepository.findAll();
-		
-		 return findAllData.stream().map(entity -> {
-		        ImageFileGetDTO dto = new ImageFileGetDTO();
-		        dto.setId(""+entity.getId());
-		        dto.setFileName(entity.getFileName());
-		        dto.setFileType(entity.getFileType());
-		        dto.setFileData(entity.getFileData());
-		        dto.setCreateDate(entity.getCreateDate());
-		        return dto;
-		    }).collect(Collectors.groupingBy(ImageFileGetDTO::getFileType));
+
+		return findAllData.stream().map(entity -> {
+			ImageFileGetDTO dto = new ImageFileGetDTO();
+			dto.setId("" + entity.getId());
+			dto.setFileName(entity.getFileName());
+			dto.setStatus(entity.isStatus());
+			dto.setFileType(entity.getFileType());
+			dto.setFileData(entity.getFileData());
+			dto.setCreateDate(entity.getCreateDate());
+			return dto;
+		}).collect(Collectors.groupingBy(ImageFileGetDTO::getFileType));
 	}
 
 	@Override
 	public ImageFileGetDTO getImageByIdAndFlagType(String id, String flagType) {
-		Optional<ImageFileEntity> optenty = imageFileRepository.findByIdAndFileType(Long.parseLong(id),flagType);
+		Optional<ImageFileEntity> optenty = imageFileRepository.findByIdAndFileType(Long.parseLong(id), flagType);
 		ImageFileGetDTO dto = new ImageFileGetDTO();
-		if(optenty.isPresent()) {
+		if (optenty.isPresent()) {
 			ImageFileEntity entity = optenty.get();
 			dto.setFileName(entity.getFileName());
 			dto.setFileData(entity.getFileData());

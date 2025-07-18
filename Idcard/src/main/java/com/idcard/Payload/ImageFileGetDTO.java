@@ -13,4 +13,6 @@ public class ImageFileGetDTO {
 	private String fileType;
 	private byte[] fileData;
 	private Date createDate;
+    private boolean status;
+
 }

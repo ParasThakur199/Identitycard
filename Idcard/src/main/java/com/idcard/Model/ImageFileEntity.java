@@ -24,6 +24,9 @@ public class ImageFileEntity {
 
     @Column(name = "file_type")
     private String fileType;
+    
+    @Column(name = "status")
+    private boolean status;
 
     @Column(name = "file_data")
     @Lob

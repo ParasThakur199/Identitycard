@@ -10,6 +10,7 @@ import lombok.Data;
 @Data
 public class ImageFileDTO {
     private String id;
+    private boolean status;
     private String fileName;
     private String fileType;
     private MultipartFile fileData;
