@@ -1,0 +1,9 @@
+package com.idcard.Repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.idcard.Model.FormLabelsEntity;
+
+public interface FormLabelsRepository extends JpaRepository<FormLabelsEntity, Long> {
+
+}

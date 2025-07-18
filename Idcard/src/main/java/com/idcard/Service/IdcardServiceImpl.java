@@ -1,0 +1,140 @@
+package com.idcard.Service;
+
+import java.io.IOException;
+import java.lang.module.ResolutionException;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.idcard.Model.IdcardEntity;
+import com.idcard.Model.StateEntity;
+import com.idcard.Payload.IdcardDTO;
+import com.idcard.Payload.IdcardGetDTO;
+import com.idcard.Repository.IdCardRepository;
+import com.idcard.Repository.StateRepository;
+
+@Service
+public class IdcardServiceImpl implements IdcardService{
+	
+	@Autowired
+	private IdCardRepository idrepo;
+	
+	@Autowired
+	private TransactionService transactionService;
+	
+	@Autowired
+	private StateRepository stateRepository;
+	
+	@Autowired
+	private FileService fileService;
+	
+	@Override
+    public String saveIdcard(IdcardDTO dto) throws IOException {
+		
+		Optional<StateEntity> optionalStateCode=stateRepository.findByStateCode(dto.getStateCode());
+		if(optionalStateCode.isEmpty())
+		{
+			throw new ResourceAccessException("Invalid State");
+		}
+		
+		String transactionId=transactionService.generateTransactionNumber(dto.getStateCode());
+	
+        IdcardEntity idc = new IdcardEntity();
+		idc.setCardno(dto.getCardno()); 
+		idc.setName(dto.getName());
+		idc.setDesignation(dto.getDesignation());
+		idc.setEmpcode(dto.getEmpcode());
+		idc.setPostingplace(dto.getPostingplace());
+		idc.setIssuedate(dto.getIssuedate());
+		idc.setValidupto(dto.getValidupto());
+		idc.setDob(dto.getDob());
+		idc.setIdentificationmark(dto.getIdentificationmark());
+		idc.setEmergencycontactname(dto.getEmergencycontactname());
+		idc.setEmergencycontactno(dto.getEmergencycontactno());
+		idc.setAddress(dto.getAddress());
+		idc.setHeight(dto.getHeight());
+		idc.setBloodgroup(dto.getBloodgroup());
+		idc.setMobile(dto.getMobile());
+		idc.setOfficeaddress(dto.getOfficeaddress());
+//		idc.setBranch(dto.getBranch());
+//		idc.setDepartment(dto.getDepartment());
+//		idc.setRemarks(dto.getRemarks());
+		idc.setStateCode(dto.getStateCode()); 		
+		idc.setPhoto(convertToByteArray(dto.getPhoto()));
+		idc.setSignature1(convertToByteArray(dto.getSignature1()));
+		idc.setSignature2(convertToByteArray(dto.getSignature2()));
+		idc.setLogo(convertToByteArray(dto.getLogo()));
+		idc.setWatermark(convertToByteArray(dto.getWatermark()));
+		idc.setTransactionId(transactionId);
+		idrepo.save(idc);
+		
+		// added
+		
+		// 💥 Call PDF generation after save
+//		fileService.generatepdf(idc.getId()); // Make sure this method accepts the full entity
+		
+//		return "Data saved and PDF generated successfully";
+		String cid = String.valueOf(idc.getId());
+		return cid;
+	}
+	
+	@Override
+	public List<IdcardGetDTO> getAllIdCards() {
+		List<IdcardEntity> entities = idrepo.findAll();
+
+	    // Convert Entity list to DTO list
+		List<IdcardGetDTO> dtoList = entities.stream()
+		        .map(entity -> {
+		        	IdcardGetDTO dto = new IdcardGetDTO(); 
+		        	dto.setId(entity.getId());
+		            dto.setCardno(entity.getCardno());
+		            dto.setName(entity.getName());
+		            dto.setDesignation(entity.getDesignation());
+		            dto.setEmpcode(entity.getEmpcode());
+		            dto.setPostingplace(entity.getPostingplace());
+		            dto.setIssuedate(entity.getIssuedate());
+		            dto.setValidupto(entity.getValidupto());
+		            dto.setDob(entity.getDob());
+		            dto.setIdentificationmark(entity.getIdentificationmark());
+		            dto.setEmergencycontactname(entity.getEmergencycontactname());
+		            dto.setEmergencycontactno(entity.getEmergencycontactno());
+		            dto.setAddress(entity.getAddress());
+		            dto.setHeight(entity.getHeight());
+		            dto.setBloodgroup(entity.getBloodgroup());
+		            dto.setMobile(entity.getMobile());
+		            dto.setOfficeaddress(entity.getOfficeaddress());
+//		            dto.setBranch(entity.getBranch());
+//		            dto.setDepartment(entity.getDepartment());
+//		            dto.setRemarks(entity.getRemarks());
+		            dto.setTransactionId(entity.getTransactionId());
+		            dto.setStateCode(entity.getStateCode());
+		            dto.setStateName(stateRepository.findByStateCode(entity.getStateCode()).get().getStateName());
+		            // Skipping photo, signature1, signature2, logo, watermark
+		            return dto;
+		        })
+	        .collect(Collectors.toList());
+	    
+	    return dtoList;
+	}
+	
+	private byte[] convertToByteArray(MultipartFile file)  {
+		try {
+			if(file!=null)
+			{
+				return file.getBytes();
+			}
+			throw new ResolutionException("Upload Document");
+			
+			
+		}catch (Exception e) {
+			throw new ResolutionException("Invalid DOcument");
+		}
+		
+		
+    }
+}

@@ -1,0 +1,11 @@
+package com.idcard.Service;
+
+import java.io.IOException;
+import java.util.List;
+
+import com.idcard.Payload.FormLabelsDTO;
+
+public interface FormLabelsService {
+	String saveFormLabel(FormLabelsDTO dto) throws IOException;
+	List<FormLabelsDTO> getAllFormLabels();
+}

@@ -1,0 +1,421 @@
+package com.idcard.Service;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Service;
+
+import com.idcard.Model.IdcardEntity;
+import com.idcard.Repository.IdCardRepository;
+
+// added
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
+import javax.swing.text.StyleConstants.ColorConstants;
+
+import org.springframework.core.io.ClassPathResource;
+
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.color.Color;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.geom.Rectangle;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
+import com.itextpdf.layout.Canvas;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.border.Border;
+import com.itextpdf.layout.border.SolidBorder;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Div;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.element.Text;
+import com.itextpdf.layout.layout.LayoutArea;
+import com.itextpdf.layout.layout.LayoutResult;
+import com.itextpdf.layout.property.HorizontalAlignment;
+import com.itextpdf.layout.property.TextAlignment;
+import com.itextpdf.layout.property.UnitValue;
+import com.itextpdf.layout.property.VerticalAlignment;
+import com.itextpdf.text.pdf.PdfPage;
+import com.itextpdf.io.font.PdfEncodings;
+
+
+
+
+@Service
+public class FileServiceImpl implements FileService {
+	
+	@Autowired
+    private IdCardRepository idrepo;
+	
+	@Override
+    public Resource getFileByIdAndType(Long id, String fileType) {
+        Optional<IdcardEntity> optional = idrepo.findById(id);
+        if (optional.isPresent()) {
+            IdcardEntity entity = optional.get();
+            byte[] fileData = null;
+
+            switch (fileType.toLowerCase()) {
+                case "photo":
+                    fileData = entity.getPhoto();
+                    break;
+                case "signature1":
+                    fileData = entity.getSignature1();
+                    break;
+                case "signature2":
+                    fileData = entity.getSignature2();
+                    break;
+                case "logo":
+                    fileData = entity.getLogo();
+                    break;
+                case "watermark":
+                    fileData = entity.getWatermark();
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid file type: " + fileType);
+            }
+
+            if (fileData != null) {
+                byte[] bytes = new byte[fileData.length];
+                for (int i = 0; i < fileData.length; i++) {
+                    bytes[i] = fileData[i];
+                }
+                return new ByteArrayResource(bytes);
+            } else {
+                throw new IllegalArgumentException("No data found for file type: " + fileType);
+            }
+        } else {
+            throw new IllegalArgumentException("No ID found: " + id);
+        }
+    }
+	
+	
+	// added
+	
+	public byte[] generatepdf(Long id) {
+		try {
+			
+			Optional<IdcardEntity> optional = idrepo.findById(id);
+	        IdcardEntity entity = optional.get();
+			
+			String fontPath = "src/main/resources/hindi.ttf";
+			PdfFont hindiFont = PdfFontFactory.createFont(fontPath, PdfEncodings.IDENTITY_H, true);
+
+			float cardWidth = 350.55f;
+			float cardHeight = 240f;
+			float gap = 20f;
+
+			float pageWidth = cardWidth + 40f; // Only one card in width
+			float pageHeight = (cardHeight * 2) + gap + 40f;
+
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			PdfWriter writer = new PdfWriter(outputStream);
+			PdfDocument pdf = new PdfDocument(writer);
+			PageSize pageSize = new PageSize(pageWidth, pageHeight);
+			Document document = new Document(pdf, pageSize);
+			document.setMargins(0, 0, 0, 0);
+
+			com.itextpdf.kernel.pdf.PdfPage page = pdf.addNewPage();
+			PdfCanvas canvas = new PdfCanvas(page);
+
+			float margin = 20f;
+
+			// Top card (Front)
+			Rectangle topCard = new Rectangle(margin, pageHeight - margin - cardHeight, cardWidth, cardHeight);
+			canvas.setStrokeColor(Color.BLACK);
+			canvas.rectangle(topCard);
+			canvas.stroke();
+
+			Canvas topCanvas = new Canvas(canvas, pdf, topCard);
+			topCanvas.setFont(hindiFont);
+			topCanvas.setFontSize(10);
+			
+			// =====================
+			// HEADER SECTION TABLE
+			// =====================
+			float[] headerWidths = { 200f, 100f, 200f }; // Left section for text, right for logo
+			Table headerTable = new Table(headerWidths);
+			headerTable.setWidth(UnitValue.createPercentValue(100));
+
+			Cell leftHeader = new Cell()
+			        .add(new Paragraph("भारत सरकार").setFont(hindiFont).setFontSize(11).setBold().setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
+			        .add(new Paragraph("Government of India").setFontSize(11).setBold().setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
+			        .add(new Paragraph("इलेक्ट्रॉनिक्स और आईटी मंत्रालय").setFont(hindiFont).setFontSize(10).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
+			        .add(new Paragraph("Ministry of Electronics and IT").setFontSize(10).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER));
+			leftHeader.setBorder(Border.NO_BORDER);
+			headerTable.addCell(leftHeader);
+
+//			Cell logoCell = new Cell().add(new Paragraph("LOGO\nPLACEHOLDER")
+//			        .setTextAlignment(TextAlignment.CENTER)
+//			        .setFontSize(8)).setPadding(5);
+//			logoCell.setBorder(new SolidBorder(0.5f));
+//			headerTable.addCell(logoCell);
+			
+			if (entity.getLogo() != null) {
+			    ImageData logoData = ImageDataFactory.create(entity.getLogo());
+			    Image logoImage = new Image(logoData);
+			    logoImage.setWidthPercent(100); // Optional: scale to fit the cell
+
+			    Cell logoCell = new Cell().add(logoImage).setPadding(5);
+			    logoCell.setBorder(Border.NO_BORDER);
+			    headerTable.addCell(logoCell);
+			} else {
+			    // Fallback if logo is missing
+			    Cell logoCell = new Cell().add(new Paragraph("LOGO\nNOT FOUND")
+			        .setTextAlignment(TextAlignment.CENTER)
+			        .setFontSize(8)).setPadding(5);
+			    logoCell.setBorder(Border.NO_BORDER);
+			    headerTable.addCell(logoCell);
+			}
+
+
+			Cell rightHeader = new Cell()
+					.add(new Paragraph("राष्ट्रीय सूचना विज्ञान केंद्र").setFont(hindiFont).setFontSize(10).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
+					.add(new Paragraph("National Informatics Center").setFontSize(10).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
+					.add(new Paragraph("नया सचिवालय, हरियाणा, चंडीगढ़").setFont(hindiFont).setFontSize(10).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
+					.add(new Paragraph("New Secretariat Haryana, Chandigarh").setFontSize(10).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER));
+			rightHeader.setBorder(Border.NO_BORDER);
+			headerTable.addCell(rightHeader);
+
+			topCanvas.add(headerTable);
+
+			// Divider line
+			topCanvas.add(new Paragraph("——————————————————————————————------———————").setFontSize(9));
+
+			// ============================
+			// INFO SECTION WITH PHOTO
+			// ============================
+			float[] infoWidths = { 100f, 200f, 200f }; // Photo and Details
+			Table infoTable = new Table(infoWidths);
+			infoTable.setWidth(UnitValue.createPercentValue(100));
+			
+			// added
+			infoTable.setKeepTogether(false); // Allow breaking
+			
+			if (entity.getPhoto() != null) {
+			    ImageData photoData = ImageDataFactory.create(entity.getPhoto());
+			    Image photoImage = new Image(photoData);
+			    photoImage.setWidthPercent(100); // Optional: scale to fit the cell
+
+			    Cell photoCell = new Cell().add(photoImage).setPadding(5);
+			    photoCell.setBorder(Border.NO_BORDER);
+			    infoTable.addCell(photoCell);
+			} else {
+			    // Fallback if photo is missing
+			    Cell photoCell = new Cell().add(new Paragraph("LOGO\nNOT FOUND")
+			        .setTextAlignment(TextAlignment.CENTER)
+			        .setFontSize(8)).setPadding(5);
+			    photoCell.setBorder(Border.NO_BORDER);
+			    infoTable.addCell(photoCell);
+			}
+
+			// Details beside photo
+//			Cell detailsCell = new Cell().setBorder(Border.NO_BORDER);
+//			detailsCell.add(new Paragraph("कार्ड नंबर / Card No.: ").setFont(hindiFont).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
+//			detailsCell.add(new Paragraph("नाम / Name: ").setFont(hindiFont).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
+//			detailsCell.add(new Paragraph("पद / Designation: ").setFont(hindiFont).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
+//			detailsCell.add(new Paragraph("Employee Code: ").setFont(hindiFont).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
+//			detailsCell.add(new Paragraph("कार्यालय / Place of Posting: ").setFont(hindiFont).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
+//			infoTable.addCell(detailsCell);
+			
+			// added watermark
+			
+			// Load watermark image
+//			Image watermarkImage = null;
+			// Details beside photo (with watermark)
+			Cell detailsCell = new Cell().setBorder(Border.NO_BORDER).setPadding(0);
+			Div detailsDiv = new Div();
+
+			// Add watermark if available
+			if (entity.getWatermark() != null) {
+			    ImageData watermarkData = ImageDataFactory.create(entity.getWatermark());
+			    Image watermarkImage = new Image(watermarkData);
+			    watermarkImage.scaleToFit(60, 60);
+			    watermarkImage.setOpacity(0.1f); // Transparent
+			    watermarkImage.setAutoScale(true);
+			    
+			    // Add watermark to the background of the div
+			    detailsDiv.add(watermarkImage);
+			}
+
+			// Add text paragraphs on top of watermark
+			detailsDiv.add(new Paragraph("कार्ड नंबर / Card No.: ").setFont(hindiFont).setFontSize(9).setMargin(0));
+			detailsDiv.add(new Paragraph("नाम / Name: ").setFont(hindiFont).setFontSize(9).setMargin(0));
+			detailsDiv.add(new Paragraph("पद / Designation: ").setFont(hindiFont).setFontSize(9).setMargin(0));
+			detailsDiv.add(new Paragraph("Employee Code: ").setFont(hindiFont).setFontSize(9).setMargin(0));
+			detailsDiv.add(new Paragraph("कार्यालय / Place of Posting: ").setFont(hindiFont).setFontSize(9).setMargin(0));
+
+			// Add the Div to the cell
+			detailsCell.add(detailsDiv);
+
+			// Add the cell to the table
+			infoTable.addCell(detailsCell);
+
+			
+
+			// Fields beside details
+			Cell fieldsCell = new Cell().setBorder(Border.NO_BORDER);
+			fieldsCell.add(new Paragraph(entity.getCardno()).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
+			fieldsCell.add(new Paragraph(entity.getName()).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
+			fieldsCell.add(new Paragraph(entity.getDesignation()).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
+			fieldsCell.add(new Paragraph(entity.getEmpcode()).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
+			fieldsCell.add(new Paragraph(entity.getPostingplace()).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
+			infoTable.addCell(fieldsCell);
+
+			topCanvas.add(infoTable);
+
+			// ====================
+			// SIGNATURES SECTION
+			// ====================
+			float[] signWidths = { 250f, 250f };
+			Table signTable = new Table(signWidths);
+			signTable.setWidth(UnitValue.createPercentValue(100));
+
+			// Left: Card Holder Signature
+			Cell cardHolderSign = new Cell().setBorder(Border.NO_BORDER);
+			
+			if (entity.getSignature1() != null) {
+			    // Create image from byte[] and scale it
+			    ImageData signatureData = ImageDataFactory.create(entity.getSignature1());
+			    Image signatureImage = new Image(signatureData);
+			    signatureImage.scaleToFit(80, 30); // Resize width: 80px, height: 30px
+			    signatureImage.setHorizontalAlignment(HorizontalAlignment.CENTER);
+
+			    // Add image inside bordered cell
+			    Cell imageCell = new Cell()
+			        .add(signatureImage)
+			        .setPadding(5)
+			        .setBorder(new SolidBorder(0.5f));
+			    cardHolderSign.add(imageCell);
+			} else {
+			    // Fallback placeholder
+			    Cell placeholderCell = new Cell()
+			        .add(new Paragraph("Signature Placeholder")
+			            .setTextAlignment(TextAlignment.CENTER)
+			            .setFontSize(8))
+			        .setBorder(new SolidBorder(0.5f));
+			    cardHolderSign.add(placeholderCell);
+			}
+			
+			cardHolderSign.add(new Paragraph("Signature of Card Holder")
+			        .setTextAlignment(TextAlignment.CENTER)
+			        .setFontSize(9));
+			signTable.addCell(cardHolderSign);
+
+			// Right: Section Officer Signature
+			Cell officerSign = new Cell().setBorder(Border.NO_BORDER);
+			
+			if (entity.getSignature2() != null) {
+			    // Create image from byte[] and scale it
+			    ImageData signatureData = ImageDataFactory.create(entity.getSignature2());
+			    Image signatureImage = new Image(signatureData);
+			    signatureImage.scaleToFit(80, 30); // Resize width: 80px, height: 30px
+			    signatureImage.setHorizontalAlignment(HorizontalAlignment.CENTER);
+
+			    // Add image inside bordered cell
+			    Cell imageCell = new Cell()
+			        .add(signatureImage)
+			        .setPadding(5)
+			        .setBorder(new SolidBorder(0.5f));
+			    officerSign.add(imageCell);
+			} else {
+			    // Fallback placeholder
+			    Cell placeholderCell = new Cell()
+			        .add(new Paragraph("Signature Placeholder")
+			            .setTextAlignment(TextAlignment.CENTER)
+			            .setFontSize(8))
+			        .setBorder(new SolidBorder(0.5f));
+			    officerSign.add(placeholderCell);
+			}
+			
+			officerSign.add(new Paragraph("अनुभाग अधिकारी/Section Officer")
+			        .setTextAlignment(TextAlignment.CENTER)
+			        .setFont(hindiFont).setFontSize(9));
+			signTable.addCell(officerSign);
+
+			topCanvas.add(signTable);
+
+			// Bottom card (Back)
+			Rectangle bottomCard = new Rectangle(margin, margin, cardWidth, cardHeight);
+			canvas.rectangle(bottomCard);
+			canvas.stroke();
+
+			Canvas bottomCanvas = new Canvas(canvas, pdf, bottomCard);
+			
+			float[] footerWidths = { 250f, 250f}; // Left section for text, right for logo
+			Table footerTable = new Table(footerWidths);
+			footerTable.setWidth(UnitValue.createPercentValue(100));
+			
+			// Details beside photo
+						Cell detailsCell1 = new Cell().setBorder(Border.NO_BORDER);
+						detailsCell1.add(new Paragraph().add(new Text("जारी करने की तिथि / Issue Date:").setFont(hindiFont).setBold())
+								.add(new Text(entity.getIssuedate())).setFontSize(10).setMultipliedLeading(1f)
+								.setMarginTop(0).setMarginBottom(0));
+						detailsCell1.add(new Paragraph().add(new Text("वैधता तिथि / Valid Upto:").setFont(hindiFont).setBold())
+								.add(new Text(entity.getValidupto())).setFontSize(10).setMultipliedLeading(1f)
+								.setMarginTop(0).setMarginBottom(0));
+						detailsCell1.add(new Paragraph().add(new Text("जन्म तिथि / Date of Birth:").setFont(hindiFont).setBold())
+								.add(new Text(entity.getDob())).setFontSize(10).setMultipliedLeading(1f)
+								.setMarginTop(0).setMarginBottom(0));
+						detailsCell1.add(new Paragraph().add(new Text("आपातकालीन संपर्क / Emegency Contact:").setFont(hindiFont).setBold())
+								.add(new Text(entity.getEmergencycontact())).setFontSize(10).setMultipliedLeading(1f)
+								.setMarginTop(0).setMarginBottom(0));
+						detailsCell1.add(new Paragraph().add(new Text("पहचान चिन्ह / Identification Mark:").setFont(hindiFont).setBold())
+								.add(new Text(entity.getIdentificationmark())).setFontSize(10).setMultipliedLeading(1f)
+								.setMarginTop(0).setMarginBottom(0));
+						detailsCell1.add(new Paragraph().add(new Text("पता / Address:").setFont(hindiFont).setBold())
+								.add(new Text(entity.getAddress())).setFontSize(10).setMultipliedLeading(1f)
+								.setMarginTop(0).setMarginBottom(0));
+						footerTable.addCell(detailsCell1);
+
+						// Fields beside details
+						Cell fieldsCell1 = new Cell().setBorder(Border.NO_BORDER);
+						fieldsCell1.add(new Paragraph().add(new Text("ऊँचाई / Height:").setFont(hindiFont).setBold())
+								.add(new Text(entity.getHeight())).setFontSize(10).setMultipliedLeading(1f)
+								.setMarginTop(0).setMarginBottom(0));
+						fieldsCell1.add(new Paragraph().add(new Text("रक्त समूह  / Blood Group:").setFont(hindiFont).setBold())
+								.add(new Text(entity.getBloodgroup())).setFontSize(10).setMultipliedLeading(1f)
+								.setMarginTop(0).setMarginBottom(0));
+						fieldsCell1.add(new Paragraph().add(new Text("मोबाइल / Mobile:").setFont(hindiFont).setBold())
+								.add(new Text(entity.getMobile())).setFontSize(10).setMultipliedLeading(1f)
+								.setMarginTop(0).setMarginBottom(0));
+						footerTable.addCell(fieldsCell1);
+
+						bottomCanvas.add(footerTable);
+			
+			
+			bottomCanvas.add(new Paragraph(
+					"---------------------------------------------------------------------------------------------------------")
+					.setFontSize(10).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
+			bottomCanvas
+					.add(new Paragraph().add(new Text("कार्यालय पता / Office Address:").setFont(hindiFont).setBold())
+							.add(new Text("नव सचिवालय भवन हरियाणा, भूतल, सेक्टर-17, चंडीगढ़ New Secretariat Building Haryana, Ground Floor, Sector-17, Chandigarh")).setFont(hindiFont).setFontSize(10).setMultipliedLeading(1f)
+							.setMarginTop(0).setMarginBottom(0));
+			bottomCanvas.add(new Paragraph(
+					"---------------------------------------------------------------------------------------------------------")
+					.setFontSize(10).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
+			bottomCanvas.add(new Paragraph().add(new Text(
+					"कृपया कार्ड की अवधि समाप्त होने के बाद इसे जमा करें। इसके गुम होने की सूचना तुरंत पुलिस और जारी करने वाले प्राधिकारी को दें। गुम होने पर ₹100/- का जुर्माना लगेगा। ")
+					.setFont(hindiFont).setBold())
+					.add(new Text(
+							"Please surrender this card after expiry. Its loss should be reported immediately to the Police and Issuing Authority. Penalty for loss is Rs. 100/-"))
+					.setFontSize(10).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
+
+			document.close();
+			return outputStream.toByteArray();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+}

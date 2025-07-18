@@ -1,0 +1,43 @@
+package com.idcard.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.idcard.Model.LabelEntity;
+import com.idcard.Payload.BlockLabelRequest;
+import com.idcard.Payload.FullSubmitRequest;
+import com.idcard.Payload.LabelDTO;
+import com.idcard.Repository.LabelRepository;
+
+import jakarta.validation.Payload;
+
+@Service
+public class LabelServiceImpl implements LabelService{
+	@Autowired
+    private LabelRepository labelRepository;
+	
+    @Override
+    public String saveLabelsFromBlocks(FullSubmitRequest request) {
+        for (BlockLabelRequest blockLabel : request.getBlockLabelData()) {
+            String block = blockLabel.getBlockId();
+            String section = blockLabel.getSection();
+            String page = blockLabel.getPage();
+            List<LabelDTO> labelDTOs = blockLabel.getLabels();
+
+            for (LabelDTO labelDto : labelDTOs) {
+                LabelEntity label = new LabelEntity();
+                label.setLabelId(labelDto.getLabelId());
+                label.setLabelName(labelDto.getLabelName());
+                label.setPage(page);           // ✅ now it’s coming from block
+                label.setSection(section);     // ✅ now it’s coming from block
+                label.setBlock(block);
+
+                labelRepository.save(label);
+            }
+        }
+        return "Labels Saved Successfully";
+    }
+}

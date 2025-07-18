@@ -1,0 +1,44 @@
+package com.idcard.Payload;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Data;
+
+@Entity
+@Table(name = "tbl_formlabels")
+@Data
+public class FormLabelsEntity {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	private String stateCode;
+	private String L1;
+	private String L2;
+	private String L3;
+	private String L4;
+	private String L5;
+	private String L6;
+	private String L7;
+	private String L8;
+	private String L9;
+	private String L10;
+	private String L11;
+	private String L12;
+	private String L13;
+	private String L14;
+	private String L15;
+	private String L16;
+	private String L17;
+	private String L18;
+	private String L19;
+	private String L20;
+	private String L21;
+	private String L22;
+	private String L23;
+	private String L24;
+	private String L25;
+	private String L26;
+}

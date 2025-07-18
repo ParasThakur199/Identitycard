@@ -1,0 +1,24 @@
+//package com.idcard.Payload;
+//
+//import java.util.List;
+//
+//public class BlockLabelRequest {
+//	private String blockId;
+//    private List<LabelDTO> labels;
+//    
+//    public String getBlockId() {
+//        return blockId;
+//    }
+//
+//    public void setBlockId(String blockId) {
+//        this.blockId = blockId;
+//    }
+//
+//    public List<LabelDTO> getLabels() {
+//        return labels;
+//    }
+//
+//    public void setLabels(List<LabelDTO> labels) {
+//        this.labels = labels;
+//    }
+//}

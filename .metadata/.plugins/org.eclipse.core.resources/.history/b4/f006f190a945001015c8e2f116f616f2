@@ -1,0 +1,8 @@
+package com.idcard.Service;
+
+import java.util.List;
+
+public class BlockLabelRequest {
+	private String blockId;
+    private List<LabelDTO> labels;
+}

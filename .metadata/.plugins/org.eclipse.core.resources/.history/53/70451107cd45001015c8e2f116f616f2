@@ -1,0 +1,42 @@
+package com.idcard.Payload;
+
+import java.util.List;
+
+public class BlockLabelRequest {
+	private String page;
+	private String section;
+	private String block;
+    private List<LabelDTO> labels;
+
+    public String getPage() {
+        return page;
+    }
+
+    public void setPage(String page) {
+        this.page = page;
+    }
+
+    public String getSection() {
+        return section;
+    }
+
+    public void setSection(String section) {
+        this.section = section;
+    }
+
+    public String getBlock() {
+        return block;
+    }
+
+    public void setBlock(String block) {
+        this.block = block;
+    }
+
+    public List<LabelDTO> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(List<LabelDTO> labels) {
+        this.labels = labels;
+    }
+}

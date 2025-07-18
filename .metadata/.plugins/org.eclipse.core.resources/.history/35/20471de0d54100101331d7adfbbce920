@@ -1,0 +1,12 @@
+package com.idcard.Service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.idcard.Repository.FormLabelsRepository;
+
+@Service
+public class FormLabelsServiceImpl implements FormLabelsService{
+	@Autowired
+	private FormLabelsRepository formlabelsRepository;
+}

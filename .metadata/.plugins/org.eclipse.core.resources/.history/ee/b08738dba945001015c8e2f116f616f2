@@ -1,0 +1,9 @@
+package com.idcard.Service;
+
+import java.util.List;
+
+import com.idcard.Payload.FormLabelsDTO;
+
+public interface LabelService {
+	List<FormLabelsDTO> getAllFormLabels();
+}

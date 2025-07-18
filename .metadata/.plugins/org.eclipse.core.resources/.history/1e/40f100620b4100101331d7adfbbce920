@@ -1,0 +1,42 @@
+package com.idcard.Payload;
+import org.springframework.web.multipart.MultipartFile;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
+
+
+@Data
+
+
+public class IdcardGetDTO { 
+    private String cardno;
+    private String transactionId;
+    private String stateCode;
+    private String stateName; 
+    private String name;
+    private String designation;
+    private String empcode;
+    private String postingplace;
+    private String issuedate;
+    private String validupto;
+    private String dob;
+    private String identificationmark;
+    private String emergencycontact;
+    private String address;
+    private String height;
+    private String bloodgroup;
+    private String mobile;
+    private String officeaddress;
+    private String branch;
+    private String department;
+    private String remarks;
+    private String language;
+    private byte[] photo;
+    private byte[] signature1;
+    private byte[] signature2;
+    private byte[] logo;
+    private byte[] watermark;	    
+}

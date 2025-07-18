@@ -1,0 +1,5 @@
+package com.idcard.Repository;
+
+public interface FormLabelsRepository {
+
+}

@@ -1,0 +1,61 @@
+package com.idcard.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.idcard.Model.LabelEntity;
+import com.idcard.Payload.BlockLabelRequest;
+import com.idcard.Payload.FullSubmitRequest;
+import com.idcard.Payload.LabelDTO;
+import com.idcard.Repository.LabelRepository;
+
+import jakarta.validation.Payload;
+
+@Service
+public class LabelServiceImpl implements LabelService{
+	@Autowired
+    private LabelRepository labelRepository;
+
+//    @Override
+//    public void saveLabelsFromBlocks(FullSubmitRequest request) {
+//        List<LabelEntity> entities = new ArrayList<>();
+//
+//        for (BlockLabelRequest block : request.getBlockLabelData()) {
+//            for (LabelDTO label : block.getLabels()) {
+//                LabelEntity entity = new LabelEntity();
+//                entity.setLabelId(label.getLabelId());
+//                entity.setLabelName(label.getLabelName());
+//                entity.setBlockId(block.getBlockId());
+//                entities.add(entity);
+//            }
+//        }
+//
+//        labelRepository.saveAll(entities);
+//    }
+	
+    @Override
+    public void saveLabelsFromBlocks(FullSubmitRequest request) {
+        List<LabelEntity> entities = new ArrayList<>();
+        for (BlockLabelRequest blockLabel : Payload.getBlockLabels()) {
+            String page = blockLabel.getPage();
+            String section = blockLabel.getSection();
+            String block = blockLabel.getBlock();
+
+            for (LabelDTO labelDto : blockLabel.getLabels()) {
+                LabelEntity label = new LabelEntity();
+                label.setLabelId(labelDto.getLabelId()); // <== Use the id from frontend
+                label.setLabelName(labelDto.getLabelName());
+                label.setPage(page);
+                label.setSection(section);
+                label.setBlock(block);
+
+                labelRepository.save(label);
+            }
+        }
+    }
+	
+
+}

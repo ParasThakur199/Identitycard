@@ -1,0 +1,70 @@
+package com.idcard.Model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Data;
+
+@Entity
+@Table(name = "tbl_formlabels")
+@Data
+public class FormLabelsEntity {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	private String stateCode;
+	// F=Frontpage, B=Backpage H=Header, BO=Body, FO=Footer, L=Label, LA=Language 
+	//Front page
+	private String FH1L1LA;
+	private String FH1L1;
+	private String FH1L2LA;
+	private String FH1L2;
+	private String FH2L1LA;
+	private String FH2L1;
+	private String FH2L2LA;
+	private String FH2L2;
+	
+	private String FBOL1LA;
+	private String FBOL1;
+	private String FBOL2LA;
+	private String FBOL2;
+	private String FBOL3LA;
+	private String FBOL3;
+	private String FBOL4LA;
+	private String FBOL4;
+	private String FBOL5LA;
+	private String FBOL5;
+	
+	private String FFOL1LA;
+	private String FFOL1;
+	private String FFOL2LA;
+	private String FFOL2;
+	
+	// Back page
+	private String BHL1LA;
+	private String BHL1;
+	private String BHL2LA;
+	private String BHL2;
+	private String BHL3LA;
+	private String BHL3;
+	private String BHL4LA;
+	private String BHL4;
+	private String BHL5LA;
+	private String BHL5;
+	private String BHL6LA;
+	private String BHL6;
+	private String BHL7LA;
+	private String BHL7;
+	private String BHL8LA;
+	private String BHL8;
+	private String BHL9LA;
+	private String BHL9;
+	
+	private String BBOL1LA;
+	private String BBOL1;
+	
+	private String BFOL1LA;
+	private String BFOL1;
+}

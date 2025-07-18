@@ -1,0 +1,13 @@
+package com.idcard.Service;
+
+import java.io.IOException;
+import java.util.List;
+
+import com.idcard.Payload.FullSubmitRequest;
+import com.idcard.Payload.IdcardGetDTO;
+import com.idcard.Payload.LabelDTO;
+
+public interface LabelService {
+	String saveLabelsFromBlocks(FullSubmitRequest request) throws IOException;
+	List<LabelDTO> getAllLabels();
+}

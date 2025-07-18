@@ -1,0 +1,20 @@
+//package com.idcard.Controller;
+//
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.http.ResponseEntity;
+//import org.springframework.web.bind.annotation.PostMapping;
+//import org.springframework.web.bind.annotation.RequestBody;
+//
+//import com.idcard.Payload.FullSubmitRequest;
+//import com.idcard.Service.LabelService;
+//
+//public class LabelController {
+//	@Autowired
+//    private LabelService labelService;
+//
+//    @PostMapping("/submit")
+//    public ResponseEntity<String> submitLabels(@RequestBody FullSubmitRequest request) {
+//        labelService.saveLabelsFromBlocks(request);
+//        return ResponseEntity.ok("Labels saved successfully.");
+//    }
+//}
