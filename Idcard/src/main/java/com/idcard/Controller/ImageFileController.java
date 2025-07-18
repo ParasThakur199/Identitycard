@@ -43,7 +43,7 @@ public class ImageFileController {
     			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(st);
         	}else {
         		st.setMessage("Image File saved successfully.");
-                return ResponseEntity.ok(st);
+                return ResponseEntity.ok(st); 
         	}
         } catch (Exception e) {
         	st.setMessage(e.getMessage());
