@@ -15,8 +15,6 @@ import com.idcard.Payload.UserRequestDto;
 import com.idcard.Payload.UserResponseDto;
 import com.idcard.Service.UserService;
 
-
-
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -26,7 +24,8 @@ public class UserController {
 	@GetMapping("/test")
 	public String test() {
 		return "test";
-		}
+	}
+
 	@PostMapping
 	public ResponseEntity<UserResponseDto> addUser(@RequestBody UserRequestDto userRequestDto) throws IOException {
 		return new ResponseEntity<>(userService.addUser(userRequestDto), HttpStatus.CREATED);
