@@ -14,5 +14,7 @@ public interface ImageFileService {
 
 	public ImageFileGetDTO getImageByIdAndFlagType(String id, String flagType);
 
+	public List<ImageFileGetDTO> getallActiveStatus(String tokenHeader);
+
 	
 }

@@ -35,13 +35,15 @@ public class ImageFileServiceImpl implements ImageFileService {
 		String status = "0";
 		List<ImageFileEntity> entities = dtoList.stream().map(dto -> {
 			try {
-				Optional<ImageFileEntity> byId = imageFileRepository.findById(dto.getId());
+				Optional<ImageFileEntity> byId = imageFileRepository.findById(Long.parseLong(dto.getId()));
 				if (byId.isPresent()) {
 					ImageFileEntity entity = byId.get();
 					entity.setFileName(dto.getFileName());
 					entity.setFileType(dto.getFileType());
 					entity.setStatus(dto.isStatus());
-					entity.setFileData(dto.getFileData().getBytes());
+					if (dto.getFileData() != null) {
+						entity.setFileData(dto.getFileData().getBytes());
+					}
 					entity.setUpdateDate(Juleandate.getCurrentDateTime());
 					entity.setUpdateUser(claims2.getUserId());
 					return entity;
@@ -91,5 +93,22 @@ public class ImageFileServiceImpl implements ImageFileService {
 			dto.setFileData(entity.getFileData());
 		}
 		return dto;
+	}
+
+	@Override
+	public List<ImageFileGetDTO> getallActiveStatus(String tokenHeader) {
+		final UserEntity claims2 = helper.getUserDetailsFromToken(tokenHeader);
+		List<ImageFileEntity> findAllData = imageFileRepository.findByStatusAndCreateUser(true, claims2.getUserId());
+
+		return findAllData.stream().map(entity -> {
+			ImageFileGetDTO dto = new ImageFileGetDTO();
+			dto.setId("" + entity.getId());
+			dto.setFileName(entity.getFileName());
+			dto.setStatus(entity.isStatus());
+			dto.setFileType(entity.getFileType());
+			dto.setFileData(entity.getFileData());
+			dto.setCreateDate(entity.getCreateDate());
+			return dto;
+		}).collect(Collectors.toList());
 	}
 }

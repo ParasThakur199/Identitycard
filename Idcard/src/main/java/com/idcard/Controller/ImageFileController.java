@@ -26,57 +26,60 @@ import com.idcard.Service.ImageFileService;
 
 import lombok.Data;
 
-
-
 @RestController
 @CrossOrigin
 @RequestMapping("/user")
 public class ImageFileController {
-	
+
 	@Autowired
 	private ImageFileService imageFileService;
-	
+
 	@Data
 	public class ImageFileDTOListWrapper {
-	    private List<ImageFileDTO> dtoList;
+		private List<ImageFileDTO> dtoList;
 	}
-	
+
 	@PostMapping(value = "/addImageFile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> imageFileHandler(@RequestHeader("Authorization") String tokenHeader,@ModelAttribute ImageFileDTOListWrapper wrapper) {
+	public ResponseEntity<?> imageFileHandler(@RequestHeader("Authorization") String tokenHeader,
+			@ModelAttribute ImageFileDTOListWrapper wrapper) {
 		Response_Status st = new Response_Status();
-        try {
-        	String saveImageFile = imageFileService.saveImageFile(tokenHeader,wrapper.getDtoList());
-        	if(saveImageFile.equalsIgnoreCase("0")) {
-        		st.setMessage("Error Data Not save");
-    			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(st);
-        	}else {
-        		st.setMessage("Image File saved successfully.");
-                return ResponseEntity.ok(st); 
-        	}
-        } catch (Exception e) {
-        	st.setMessage(e.getMessage());
+		try {
+			String saveImageFile = imageFileService.saveImageFile(tokenHeader, wrapper.getDtoList());
+			if (saveImageFile.equalsIgnoreCase("0")) {
+				st.setMessage("Error Data Not save");
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(st);
+			} else {
+				st.setMessage("Image File saved successfully.");
+				return ResponseEntity.ok(st);
+			}
+		} catch (Exception e) {
+			st.setMessage(e.getMessage());
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(st);
 		}
-    }
-	
-	// Get Inquest Paper Receipt Detail
-		@GetMapping("/getallimagefile")
-		public ResponseEntity<?> getAllImageFileHandler() {
-			Map<String, List<ImageFileGetDTO>> getAllImageFile = imageFileService.getAllImageFile();
-			return ResponseEntity.status(HttpStatus.OK).body(getAllImageFile);
-		}
-		
-		@PostMapping("/addImageIdAndFlagType")
-		public ResponseEntity<?> addImageByIdAndFlagType(@RequestBody List<Map<String, String>> keyValuedata) {
-		    List<ImageFileGetDTO> resultList = keyValuedata.stream()
-		        .map(entry -> {
-		            String id = entry.get("id");
-		            String flagType = entry.get("flagType");
-		            return imageFileService.getImageByIdAndFlagType(id, flagType);
-		        })
-		        .toList();
+	}
 
-		    return ResponseEntity.ok(resultList);
-		}
-		
+	// Get Inquest Paper Receipt Detail
+	@GetMapping("/getallimagefile")
+	public ResponseEntity<?> getAllImageFileHandler() {
+		Map<String, List<ImageFileGetDTO>> getAllImageFile = imageFileService.getAllImageFile();
+		return ResponseEntity.status(HttpStatus.OK).body(getAllImageFile);
+	}
+
+	// Get Inquest Paper Receipt Detail
+	@GetMapping("/getallActiveStatus")
+	public ResponseEntity<?> getallActiveStatus(@RequestHeader("Authorization") String tokenHeader) {
+		List<ImageFileGetDTO> getAllImageFile = imageFileService.getallActiveStatus(tokenHeader);
+
+		return ResponseEntity.status(HttpStatus.OK).body(getAllImageFile);
+	}
+
+//	@PostMapping("/addImageIdAndFlagType")
+//	public ResponseEntity<?> addImageByIdAndFlagType(@RequestBody List<Map<String, String>> keyValuedata) {
+//		List<ImageFileGetDTO> resultList = keyValuedata.stream().map(entry -> {
+//			String id = entry.get("id");
+//			String flagType = entry.get("flagType");
+//			return imageFileService.getImageByIdAndFlagType(id, flagType);
+//		}).toList();
+//		return ResponseEntity.ok(resultList);
+//	}
 }
