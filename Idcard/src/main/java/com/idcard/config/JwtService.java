@@ -48,7 +48,7 @@ public class JwtService {
 
 	    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
 	        UserEntity user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
-	        Long id = user.getUserid();
+	        Long id = user.getId();
 
 	        return Jwts
 	                .builder()

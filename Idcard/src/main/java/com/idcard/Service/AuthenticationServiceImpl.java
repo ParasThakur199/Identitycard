@@ -32,8 +32,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 		}
 
 		UserEntity user = userRepository.findByEmail(signInRequestDto.getUsername()).orElseThrow();
-		UserResponseDto userResponseDto = UserResponseDto.builder().id(user.getUserid()).firstName(user.getFirstName())
-				.lastName(user.getLastName()).email(user.getEmail()).build();
+		UserResponseDto userResponseDto = UserResponseDto.builder().id(user.getId()).firstName(user.getFirstName())
+				.lastName(user.getLastName()).email(user.getEmail()).userId(user.getUserId()).mobile(user.getMobile()).build();
 
 		String jwtToken = jwtService.generateToken(user);
 		return AuthenticationResponseDto.builder().token(jwtToken).userResponseDto(userResponseDto).build();

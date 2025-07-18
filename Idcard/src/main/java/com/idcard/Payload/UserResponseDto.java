@@ -15,8 +15,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserResponseDto {
 	 private Long id;
+	 private String userId;
 	 private String firstName;
 	 private String lastName;
 	 private String email;
+	 private String mobile;
 	 private final Role role = Role.User;	
 }

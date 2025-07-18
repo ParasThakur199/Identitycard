@@ -66,10 +66,17 @@ public class ImageFileController {
 			return ResponseEntity.status(HttpStatus.OK).body(getAllImageFile);
 		}
 		
-		@GetMapping("/getImageByIdAndFlagType/{trn}")
-		public ResponseEntity<?> getImageByIdAndFlagType(@PathVariable("id") String id ,@PathVariable("flagType") String flagType ) {
-			ImageFileGetDTO Victimdetail = imageFileService.getImageByIdAndFlagType(id,flagType);
-			return ResponseEntity.status(HttpStatus.OK).body(Victimdetail);
+		@PostMapping("/addImageIdAndFlagType")
+		public ResponseEntity<?> addImageByIdAndFlagType(@RequestBody List<Map<String, String>> keyValuedata) {
+		    List<ImageFileGetDTO> resultList = keyValuedata.stream()
+		        .map(entry -> {
+		            String id = entry.get("id");
+		            String flagType = entry.get("flagType");
+		            return imageFileService.getImageByIdAndFlagType(id, flagType);
+		        })
+		        .toList();
+
+		    return ResponseEntity.ok(resultList);
 		}
 		
 }

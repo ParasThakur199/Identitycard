@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.idcard.CommonData.PasswordGenerate;
-import com.idcard.CommonData.SMS_ProductionDelhi;
-import com.idcard.CommonData.SMS_Staging;
 import com.idcard.CommonData.ValidationFunction;
 import com.idcard.Model.UserEntity;
 import com.idcard.Payload.UserRequestDto;
@@ -54,14 +52,21 @@ public class UserServiceImpl implements UserService {
 		user.setFirstName(userRequestDto.getFirstName());
 		user.setLastName(userRequestDto.getLastName());
 		user.setRole(Role.User);
-		user.setEmail(userRequestDto.getEmail());
-		user.setPassword(passwordEncoder.encode(encryptedPassword));
-		user.setMobile(userRequestDto.getMobile());
-		userRepository.save(user);
 		
-		mail(userRequestDto.getEmail(),passwordGenerate);
+		
 		// sendUserIdAndPasswordForStaging(userRequestDto.getMobile(),userRequestDto.getEmail(),passwordGenerate);
 		//sms.sendmail(userRequestDto.getEmail(), "", "", "test", "test");
+
+		String email = userRequestDto.getEmail();
+		int atIndex = email.indexOf("@");
+		String userId = email.substring(0, atIndex);
+		user.setUserId(userId);
+		user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(encryptedPassword));
+        user.setMobile(userRequestDto.getMobile());
+        userRepository.save(user);
+        mail(userRequestDto.getEmail(),passwordGenerate);
+
 //        try {
 //			String pass = password1 != null ? passwordGenerate : "Test@00";
 //			allOTPGenerationAndSend.sendUserIdAndPassword(user.getMobile(), user.getFirstName(), user.getPassword());

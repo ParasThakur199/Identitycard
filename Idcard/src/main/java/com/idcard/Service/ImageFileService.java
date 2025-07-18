@@ -13,5 +13,6 @@ public interface ImageFileService {
 	public  Map<String, List<ImageFileGetDTO>> getAllImageFile();
 
 	public ImageFileGetDTO getImageByIdAndFlagType(String id, String flagType);
+
 	
 }
