@@ -2,6 +2,7 @@ package com.idcard.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -50,8 +51,9 @@ public class ImageFileServiceImpl implements ImageFileService {
 	}
 
 	@Override
-	public List<ImageFileGetDTO> getAllImageFile() {
+	public Map<String, List<ImageFileGetDTO>> getAllImageFile() {
 		List<ImageFileEntity> findAllData = imageFileRepository.findAll();
+		
 		 return findAllData.stream().map(entity -> {
 		        ImageFileGetDTO dto = new ImageFileGetDTO();
 		        dto.setId(""+entity.getId());
@@ -60,8 +62,7 @@ public class ImageFileServiceImpl implements ImageFileService {
 		        dto.setFileData(entity.getFileData());
 		        dto.setCreateDate(entity.getCreateDate());
 		        return dto;
-		    }).collect(Collectors.toList());
-		
+		    }).collect(Collectors.groupingBy(ImageFileGetDTO::getFileType));
 	}
 
 	@Override
@@ -74,5 +75,4 @@ public class ImageFileServiceImpl implements ImageFileService {
 		}
 		return dto;
 	}
-
 }

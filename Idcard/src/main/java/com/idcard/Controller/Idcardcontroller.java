@@ -147,5 +147,4 @@ public class Idcardcontroller {
 		}
 		return byteObjects;
 	}
-	
 }

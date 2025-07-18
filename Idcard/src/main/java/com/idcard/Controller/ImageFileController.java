@@ -2,6 +2,7 @@ package com.idcard.Controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,8 @@ import com.idcard.Payload.ImageFileGetDTO;
 import com.idcard.Payload.Response_Status;
 import com.idcard.Service.ImageFileService;
 
+import lombok.Data;
+
 
 
 @RestController
@@ -33,11 +36,16 @@ public class ImageFileController {
 	@Autowired
 	private ImageFileService imageFileService;
 	
+	@Data
+	public class ImageFileDTOListWrapper {
+	    private List<ImageFileDTO> dtoList;
+	}
+	
 	@PostMapping(value = "/addImageFile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> imageFileHandler(@RequestHeader("Authorization") String tokenHeader,@ModelAttribute List<ImageFileDTO> dtoList) {
+    public ResponseEntity<?> imageFileHandler(@RequestHeader("Authorization") String tokenHeader,@ModelAttribute ImageFileDTOListWrapper wrapper) {
 		Response_Status st = new Response_Status();
         try {
-        	String saveImageFile = imageFileService.saveImageFile(tokenHeader,dtoList);
+        	String saveImageFile = imageFileService.saveImageFile(tokenHeader,wrapper.getDtoList());
         	if(saveImageFile.equalsIgnoreCase("0")) {
         		st.setMessage("Error Data Not save");
     			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(st);
@@ -54,7 +62,7 @@ public class ImageFileController {
 	// Get Inquest Paper Receipt Detail
 		@GetMapping("/getallimagefile")
 		public ResponseEntity<?> getAllImageFileHandler() {
-			List<ImageFileGetDTO> getAllImageFile = imageFileService.getAllImageFile();
+			Map<String, List<ImageFileGetDTO>> getAllImageFile = imageFileService.getAllImageFile();
 			return ResponseEntity.status(HttpStatus.OK).body(getAllImageFile);
 		}
 		
