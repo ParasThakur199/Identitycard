@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 //import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -77,11 +78,11 @@ public class Idcardcontroller {
     
     // added*/
 	
-	@PostMapping("/submitform")
-	public ResponseEntity<String> saveData(@ModelAttribute IdcardDTO dto)
+	@PostMapping(value = "/submitform", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<String> saveData(@RequestHeader("Authorization") String tokenHeader,@ModelAttribute IdcardDTO dto)
 	{ 
 		try {
-			String response = idcardService.saveIdcard(dto);
+			String response = idcardService.saveIdcard(tokenHeader,dto);
 	        return ResponseEntity.ok(response);
 		} catch (Exception e) {
 		return ResponseEntity.status(500).body("Failed to save data: " + e.getMessage());

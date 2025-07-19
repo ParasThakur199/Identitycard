@@ -19,6 +19,8 @@ import com.idcard.Payload.UserResponseDto;
 import com.idcard.Repository.UserRepository;
 import com.idcard.enums.Role;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class UserServiceImpl implements UserService {
 	@Autowired
@@ -40,6 +42,7 @@ public class UserServiceImpl implements UserService {
 	//private SMS_Staging sms_Staging;
 
 	@Override
+	@Transactional
 	public UserResponseDto addUser(UserRequestDto userRequestDto) throws IOException {
 		String passwordGenerate = "";
 		UserEntity user = new UserEntity();

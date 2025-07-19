@@ -151,37 +151,53 @@ public class FileServiceImpl implements FileService {
 			
 
 			Cell leftHeader = new Cell()
-			        .add(new Paragraph("भारत सरकार").setFont(hindiFont).setFontSize(11).setBold().setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
-			        .add(new Paragraph("Government of India").setFontSize(11).setFont(bold).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
+			        .add(new Paragraph("भारत सरकार").setFont(hindiFont).setFontSize(11).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
+			        .add(new Paragraph("Government of India").setFontSize(9).setFont(bold).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
 			        .add(new Paragraph("इलेक्ट्रॉनिक्स और आईटी मंत्रालय").setFont(hindiFont).setFontSize(10).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
-			        .add(new Paragraph("Ministry of Electronics and IT").setFontSize(10).setFont(bold).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER));
-			leftHeader.setBorder(Border.NO_BORDER);
+			        .add(new Paragraph("Ministry of Electronics and IT").setFontSize(9).setFont(bold).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER));
+//			leftHeader.setBorder(Border.NO_BORDER);
+			leftHeader.setBorderTop(Border.NO_BORDER)
+		    .setBorderLeft(Border.NO_BORDER)
+		    .setBorderRight(Border.NO_BORDER)
+		    .setBorderBottom(new SolidBorder(1));
 			headerTable.addCell(leftHeader);
 			
 			if (entity.getLogo() != null) {
 			    ImageData logoData = ImageDataFactory.create(entity.getLogo());
 			    Image logoImage = new Image(logoData);
-			    logoImage.setWidthPercent(100); // Optional: scale to fit the cell
-
+//			    logoImage.setWidthPercent(100); // Optional: scale to fit the cell
+			    logoImage.setHeight(60);
+			    logoImage.setWidth(50);
 			    Cell logoCell = new Cell().add(logoImage).setPadding(5);
-			    logoCell.setBorder(Border.NO_BORDER);
+//			    logoCell.setBorder(Border.NO_BORDER);
+			    logoCell.setBorderTop(Border.NO_BORDER)
+			    .setBorderLeft(Border.NO_BORDER)
+			    .setBorderRight(Border.NO_BORDER)
+			    .setBorderBottom(new SolidBorder(1));
 			    headerTable.addCell(logoCell);
 			} else {
 			    // Fallback if logo is missing
 			    Cell logoCell = new Cell().add(new Paragraph("LOGO\nNOT FOUND")
 			        .setTextAlignment(TextAlignment.CENTER)
 			        .setFontSize(8)).setPadding(5);
-			    logoCell.setBorder(Border.NO_BORDER);
+//			    logoCell.setBorder(Border.NO_BORDER);
+			    logoCell.setBorderTop(Border.NO_BORDER)
+			    .setBorderLeft(Border.NO_BORDER)
+			    .setBorderRight(Border.NO_BORDER)
+			    .setBorderBottom(new SolidBorder(1));
 			    headerTable.addCell(logoCell);
 			}
 
 
 			Cell rightHeader = new Cell()
 					.add(new Paragraph("राष्ट्रीय सूचना विज्ञान केंद्र").setFont(hindiFont).setFontSize(10).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
-					.add(new Paragraph("National Informatics Center").setFontSize(10).setFont(bold).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
+					.add(new Paragraph("National Informatics Center").setFontSize(9).setFont(bold).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
 					.add(new Paragraph("नया सचिवालय, हरियाणा, चंडीगढ़").setFont(hindiFont).setFontSize(10).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
-					.add(new Paragraph("New Secretariat Haryana, Chandigarh").setFontSize(10).setFont(bold).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER));
-			rightHeader.setBorder(Border.NO_BORDER);
+					.add(new Paragraph("New Secretariat Haryana, Chandigarh").setFontSize(9).setFont(bold).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER));
+			rightHeader.setBorderTop(Border.NO_BORDER)
+		    .setBorderLeft(Border.NO_BORDER)
+		    .setBorderRight(Border.NO_BORDER)
+		    .setBorderBottom(new SolidBorder(1));
 			headerTable.addCell(rightHeader);
 
 			
@@ -214,51 +230,119 @@ public class FileServiceImpl implements FileService {
 			topCanvas.add(headerTable);
 
 			// Divider line
-			topCanvas.add(new Paragraph("——————————————————————————————------———————").setFontSize(9));
+//			topCanvas.add(new Paragraph("——————————————————————————————------———————").setFontSize(4));
 
 			// ============================
 			// INFO SECTION WITH PHOTO
 			// ============================
-			float[] infoWidths = { 100f, 200f, 200f }; // Photo and Details
+//			float[] infoWidths = { 100f, 200f, 200f }; // Photo and Details
+//			Table infoTable = new Table(infoWidths);
+//			infoTable.setWidth(UnitValue.createPercentValue(100));
+//			
+//			if (entity.getPhoto() != null) {
+//			    ImageData photoData = ImageDataFactory.create(entity.getPhoto());
+//			    Image photoImage = new Image(photoData);
+//			    photoImage.setWidthPercent(100); // Optional: scale to fit the cell
+//
+//			    Cell photoCell = new Cell().add(photoImage).setPadding(5);
+//			    photoCell.setBorder(Border.NO_BORDER);
+//			    infoTable.addCell(photoCell);
+//			} else {
+//			    // Fallback if photo is missing
+//			    Cell photoCell = new Cell().add(new Paragraph("LOGO\nNOT FOUND")
+//			        .setTextAlignment(TextAlignment.CENTER)
+//			        .setFontSize(8)).setPadding(5);
+//			    photoCell.setBorder(Border.NO_BORDER);
+//			    infoTable.addCell(photoCell);
+//			}
+//
+//			// Details beside photo
+//			Cell detailsCell = new Cell().setBorder(Border.NO_BORDER);
+//			detailsCell.add(new Paragraph("कार्ड नंबर / Card No.: ").setFont(hindiFont).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
+//			detailsCell.add(new Paragraph("नाम / Name: ").setFont(hindiFont).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
+//			detailsCell.add(new Paragraph("पद / Designation: ").setFont(hindiFont).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
+//			detailsCell.add(new Paragraph("Employee Code: ").setFont(hindiFont).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
+//			detailsCell.add(new Paragraph("कार्यालय / Place of Posting: ").setFont(hindiFont).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
+//			infoTable.addCell(detailsCell);
+//
+//			// Fields beside details
+//			Cell fieldsCell = new Cell().setBorder(Border.NO_BORDER);
+//			fieldsCell.add(new Paragraph(entity.getCardno()).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
+//			fieldsCell.add(new Paragraph(entity.getName()).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
+//			fieldsCell.add(new Paragraph(entity.getDesignation()).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
+//			fieldsCell.add(new Paragraph(entity.getEmpcode()).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
+//			fieldsCell.add(new Paragraph(entity.getPostingplace()).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
+//			infoTable.addCell(fieldsCell);
+//
+//			topCanvas.add(infoTable);
+			
+			float[] infoWidths = { 100f, 150f, 250f };
 			Table infoTable = new Table(infoWidths);
 			infoTable.setWidth(UnitValue.createPercentValue(100));
-			
+
+			// First row with image and first field
+			// Photo Cell
+			Cell photoCell;
 			if (entity.getPhoto() != null) {
 			    ImageData photoData = ImageDataFactory.create(entity.getPhoto());
 			    Image photoImage = new Image(photoData);
-			    photoImage.setWidthPercent(100); // Optional: scale to fit the cell
-
-			    Cell photoCell = new Cell().add(photoImage).setPadding(5);
-			    photoCell.setBorder(Border.NO_BORDER);
-			    infoTable.addCell(photoCell);
+			    photoImage.setWidthPercent(100);
+			    photoCell = new Cell(5, 1) // span 5 rows vertically
+			        .add(photoImage)
+			        .setPadding(5)
+			        .setBorder(Border.NO_BORDER);
 			} else {
-			    // Fallback if photo is missing
-			    Cell photoCell = new Cell().add(new Paragraph("LOGO\nNOT FOUND")
-			        .setTextAlignment(TextAlignment.CENTER)
-			        .setFontSize(8)).setPadding(5);
-			    photoCell.setBorder(Border.NO_BORDER);
-			    infoTable.addCell(photoCell);
+			    photoCell = new Cell(5, 1)
+			        .add(new Paragraph("LOGO\nNOT FOUND")
+			            .setTextAlignment(TextAlignment.CENTER)
+			            .setFontSize(8))
+			        .setPadding(5)
+			        .setBorder(Border.NO_BORDER);
 			}
+			infoTable.addCell(photoCell);
 
-			// Details beside photo
-			Cell detailsCell = new Cell().setBorder(Border.NO_BORDER);
-			detailsCell.add(new Paragraph("कार्ड नंबर / Card No.: ").setFont(hindiFont).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
-			detailsCell.add(new Paragraph("नाम / Name: ").setFont(hindiFont).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
-			detailsCell.add(new Paragraph("पद / Designation: ").setFont(hindiFont).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
-			detailsCell.add(new Paragraph("Employee Code: ").setFont(hindiFont).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
-			detailsCell.add(new Paragraph("कार्यालय / Place of Posting: ").setFont(hindiFont).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
-			infoTable.addCell(detailsCell);
+			// Row 1: Card No
+			infoTable.addCell(new Cell().add(new Paragraph("कार्ड नंबर / Card No.:")
+			    .setFont(hindiFont).setFontSize(9).setMultipliedLeading(1f).setMargin(0))
+			    .setBorder(Border.NO_BORDER));
+			infoTable.addCell(new Cell().add(new Paragraph(entity.getCardno())
+			    .setFontSize(9).setMultipliedLeading(1f).setMargin(0))
+			    .setBorder(Border.NO_BORDER));
 
-			// Fields beside details
-			Cell fieldsCell = new Cell().setBorder(Border.NO_BORDER);
-			fieldsCell.add(new Paragraph(entity.getCardno()).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
-			fieldsCell.add(new Paragraph(entity.getName()).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
-			fieldsCell.add(new Paragraph(entity.getDesignation()).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
-			fieldsCell.add(new Paragraph(entity.getEmpcode()).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
-			fieldsCell.add(new Paragraph(entity.getPostingplace()).setFontSize(9).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0));
-			infoTable.addCell(fieldsCell);
+			// Row 2: Name
+			infoTable.addCell(new Cell().add(new Paragraph("नाम / Name:")
+			    .setFont(hindiFont).setFontSize(9).setMultipliedLeading(1f).setMargin(0))
+			    .setBorder(Border.NO_BORDER));
+			infoTable.addCell(new Cell().add(new Paragraph(entity.getName())
+			    .setFontSize(9).setMultipliedLeading(1f).setMargin(0))
+			    .setBorder(Border.NO_BORDER));
+
+			// Row 3: Designation
+			infoTable.addCell(new Cell().add(new Paragraph("पद / Designation:")
+			    .setFont(hindiFont).setFontSize(9).setMultipliedLeading(1f).setMargin(0))
+			    .setBorder(Border.NO_BORDER));
+			infoTable.addCell(new Cell().add(new Paragraph(entity.getDesignation())
+			    .setFontSize(9).setMultipliedLeading(1f).setMargin(0))
+			    .setBorder(Border.NO_BORDER));
+
+			// Row 4: Employee Code
+			infoTable.addCell(new Cell().add(new Paragraph("Employee Code:")
+			    .setFont(hindiFont).setFontSize(9).setMultipliedLeading(1f).setMargin(0))
+			    .setBorder(Border.NO_BORDER));
+			infoTable.addCell(new Cell().add(new Paragraph(entity.getEmpcode())
+			    .setFontSize(9).setMultipliedLeading(1f).setMargin(0))
+			    .setBorder(Border.NO_BORDER));
+
+			// Row 5: Place of Posting
+			infoTable.addCell(new Cell().add(new Paragraph("कार्यालय / Place of Posting:")
+			    .setFont(hindiFont).setFontSize(9).setMultipliedLeading(1f).setMargin(0))
+			    .setBorder(Border.NO_BORDER));
+			infoTable.addCell(new Cell().add(new Paragraph(entity.getPostingplace())
+			    .setFontSize(9).setMultipliedLeading(1f).setMargin(0))
+			    .setBorder(Border.NO_BORDER));
 
 			topCanvas.add(infoTable);
+
 
 			// ====================
 			// SIGNATURES SECTION
@@ -331,6 +415,8 @@ public class FileServiceImpl implements FileService {
 
 			topCanvas.add(signTable);
 
+			
+			
 			// Bottom card (Back)
 			Rectangle bottomCard = new Rectangle(margin, margin, cardWidth, cardHeight);
 			canvas.rectangle(bottomCard);

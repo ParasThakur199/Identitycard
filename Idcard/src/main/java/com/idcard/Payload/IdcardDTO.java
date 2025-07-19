@@ -9,8 +9,6 @@ import lombok.Data;
 
 
 @Data
-
-
 public class IdcardDTO {
     @NotBlank(message = "Card number is required")
     @Size(max = 5, message = "Name must be at most 5 characters")

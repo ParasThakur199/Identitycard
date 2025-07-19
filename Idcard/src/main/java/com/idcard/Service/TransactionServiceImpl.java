@@ -18,7 +18,7 @@ public class TransactionServiceImpl implements TransactionService {
     private TransactionRepository transactionRepository;
 
     @Override
-    public String generateTransactionNumber(String stateCode) {
+	public String generateTransactionNumber(String stateCode) {
         String currentYear = String.valueOf(Year.now().getValue());
         String counter = "00001";
         int serialNumber;
@@ -30,9 +30,9 @@ public class TransactionServiceImpl implements TransactionService {
             serialnumber=serialnumber + 1;
             counter=String.format("%05d", serialnumber);
 			ent.setSerialNumber(serialnumber); 
-           ent.setStateCode(stateCode);
-           ent.setYear(currentYear);
-           ent.setUpdateDate(Juleandate.getCurrentDateTime());
+			ent.setStateCode(stateCode);
+			ent.setYear(currentYear);
+			ent.setUpdateDate(Juleandate.getCurrentDateTime());
            
             transactionRepository.save(ent);
         } else {

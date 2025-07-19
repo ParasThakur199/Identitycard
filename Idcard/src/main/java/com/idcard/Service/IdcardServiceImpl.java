@@ -13,10 +13,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.idcard.Model.IdcardEntity;
 import com.idcard.Model.StateEntity;
+import com.idcard.Model.UserEntity;
 import com.idcard.Payload.IdcardDTO;
 import com.idcard.Payload.IdcardGetDTO;
 import com.idcard.Repository.IdCardRepository;
 import com.idcard.Repository.StateRepository;
+import com.idcard.config.JwtService;
 
 @Service
 public class IdcardServiceImpl implements IdcardService{
@@ -33,15 +35,12 @@ public class IdcardServiceImpl implements IdcardService{
 	@Autowired
 	private FileService fileService;
 	
+	@Autowired
+	private JwtService helper;
+	
 	@Override
-    public String saveIdcard(IdcardDTO dto) throws IOException {
-		
-		Optional<StateEntity> optionalStateCode=stateRepository.findByStateCode(dto.getStateCode());
-		if(optionalStateCode.isEmpty())
-		{
-			throw new ResourceAccessException("Invalid State");
-		}
-		
+    public String saveIdcard(String tokenHeader,IdcardDTO dto) throws IOException {
+		final UserEntity claims2 = helper.getUserDetailsFromToken(tokenHeader);
 		String transactionId=transactionService.generateTransactionNumber(dto.getStateCode());
 	
         IdcardEntity idc = new IdcardEntity();
@@ -113,7 +112,7 @@ public class IdcardServiceImpl implements IdcardService{
 //		            dto.setRemarks(entity.getRemarks());
 		            dto.setTransactionId(entity.getTransactionId());
 		            dto.setStateCode(entity.getStateCode());
-		            dto.setStateName(stateRepository.findByStateCode(entity.getStateCode()).get().getStateName());
+//		            dto.setStateName(stateRepository.findByStateCode(entity.getStateCode()).get().getStateName());
 		            // Skipping photo, signature1, signature2, logo, watermark
 		            return dto;
 		        })
