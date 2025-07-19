@@ -19,6 +19,7 @@ import com.idcard.Repository.ImageFileRepository;
 import com.idcard.config.JwtService;
 import com.idcard.exception.ResourceNotFoundException;
 
+import jakarta.transaction.Transactional;
 
 @Service
 public class ImageFileServiceImpl implements ImageFileService {
@@ -35,7 +36,11 @@ public class ImageFileServiceImpl implements ImageFileService {
 		String status = "0";
 		List<ImageFileEntity> entities = dtoList.stream().map(dto -> {
 			try {
-				Optional<ImageFileEntity> byId = imageFileRepository.findById(Long.parseLong(dto.getId()));
+				String id = dto.getId();
+				if (id == null) {
+					id = "0";
+				}
+				Optional<ImageFileEntity> byId = imageFileRepository.findById(Long.parseLong(id));
 				if (byId.isPresent()) {
 					ImageFileEntity entity = byId.get();
 					entity.setFileName(dto.getFileName());
@@ -95,6 +100,7 @@ public class ImageFileServiceImpl implements ImageFileService {
 		return dto;
 	}
 
+	@Transactional
 	@Override
 	public List<ImageFileGetDTO> getallActiveStatus(String tokenHeader) {
 		final UserEntity claims2 = helper.getUserDetailsFromToken(tokenHeader);
