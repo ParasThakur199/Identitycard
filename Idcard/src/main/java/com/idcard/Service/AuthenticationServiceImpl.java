@@ -25,8 +25,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 	public AuthenticationResponseDto authenticate(SignInRequestDto signInRequestDto) {
 		try {
-			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signInRequestDto.getUsername(),
-					signInRequestDto.getPassword()));
+//			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signInRequestDto.getUsername(),
+//					signInRequestDto.getPassword()));
+			UsernamePasswordAuthenticationToken authInputToken =
+                    new UsernamePasswordAuthenticationToken(signInRequestDto.getUsername(), signInRequestDto.getPassword());
+			authenticationManager.authenticate(authInputToken);
 		} catch (Exception e) {
 			throw new UsernameNotFoundException("UserName and Password not matched");
 		}
@@ -49,4 +52,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 //        throw new IllegalArgumentException("Invalid refresh token");
 //		return null;
 //	}
+	
+	
 }

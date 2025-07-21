@@ -51,7 +51,6 @@ public class UserServiceImpl implements UserService {
 		String password1 = validationFunction.convertSHA256(passwordGenerate);
 		String encryptedPassword = passwordEncoder.encode(
 				password1 != null ? password1 : "6a62655eed819ce425894c0c3a18bd7dd469d5b6ce7835fff8b0cb064a129f06");
-
 		user.setFirstName(userRequestDto.getFirstName());
 		user.setLastName(userRequestDto.getLastName());
 		user.setRole(Role.User);
@@ -65,7 +64,8 @@ public class UserServiceImpl implements UserService {
 		String userId = email.substring(0, atIndex);
 		user.setUserId(userId);
 		user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(encryptedPassword));
+		user.setPassword(passwordEncoder.encode(passwordGenerate));
+//        user.setPassword(passwordEncoder.encode(encryptedPassword));
         user.setMobile(userRequestDto.getMobile());
         userRepository.save(user);
         mail(userRequestDto.getEmail(),passwordGenerate);
