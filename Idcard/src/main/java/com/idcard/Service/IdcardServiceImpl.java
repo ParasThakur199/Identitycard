@@ -139,11 +139,11 @@ public class IdcardServiceImpl implements IdcardService {
 			idc.setCardStatus(dto.getCardStatus());
 			String trn = idc.getTransactionId();
 			String lastFour = trn.length() >= 4 ? trn.substring(trn.length() - 4) : trn;
-			int nextNumber = Integer.parseInt(lastFour) + 1; // Increment
-			String padded = String.format("%04d", nextNumber);
+//			int nextNumber = Integer.parseInt(lastFour) + 1; // Increment
+//			String padded = String.format("%04d", nextNumber);
 			if (dto.getCardStatus().equalsIgnoreCase("A")) {
 				idc.setIssuedate(Juleandate.getCurrentDateTime());
-				idc.setCardno(padded);
+				idc.setCardno(lastFour);
 			}
 			idrepo.save(idc);
 
