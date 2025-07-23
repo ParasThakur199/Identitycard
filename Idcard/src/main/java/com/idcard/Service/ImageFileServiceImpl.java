@@ -104,7 +104,7 @@ public class ImageFileServiceImpl implements ImageFileService {
 	@Override
 	public List<ImageFileGetDTO> getallActiveStatus(String tokenHeader) {
 		final UserEntity claims2 = helper.getUserDetailsFromToken(tokenHeader);
-		List<ImageFileEntity> findAllData = imageFileRepository.findByStatusAndCreateUser(true, claims2.getUserId());
+		List<ImageFileEntity> findAllData = imageFileRepository.findByStatus(true);
 
 		return findAllData.stream().map(entity -> {
 			ImageFileGetDTO dto = new ImageFileGetDTO();

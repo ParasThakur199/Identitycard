@@ -10,6 +10,7 @@ import lombok.Data;
 
 @Data
 public class IdcardDTO {
+	private Long id;
     @NotBlank(message = "Card number is required")
     @Size(max = 5, message = "Name must be at most 5 characters")
     private String cardno; 
@@ -28,9 +29,9 @@ public class IdcardDTO {
     @Size(max = 50, message = "Posting Place must be at most 50 characters")
     private String postingplace;
 
-    @NotBlank(message = "Issue date is required")
-    @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "Issue date must be in the format yyyy-MM-dd")
-    private String issuedate;
+//    @NotBlank(message = "Issue date is required")
+//    @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "Issue date must be in the format yyyy-MM-dd")
+//    private String issuedate;
 
     @NotBlank(message = "Valid upto date is required")
     @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "Valid upto must be in the format yyyy-MM-dd")
@@ -83,6 +84,9 @@ public class IdcardDTO {
 //    @Size(max = 50, message = "Remarks must be at most 50 characters")
     private String remarks;
     
+    @Size(max = 1, message = "Status must be at most 1 characters")
+    private String cardStatus;
+    
     private String language;
 
     @NotNull(message = "Photo is required")
@@ -100,4 +104,6 @@ public class IdcardDTO {
     @NotNull(message = "Watermark is required")
     private MultipartFile watermark;	    
 	    // Getters and setters
+    private String createUser;
+    
 }

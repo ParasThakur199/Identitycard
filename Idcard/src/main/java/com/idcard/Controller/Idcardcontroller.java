@@ -76,7 +76,6 @@ public class Idcardcontroller {
     	return new ResponseEntity<>(labelService.getAllLabels(), HttpStatus.OK);
     }
     
-    // added*/
 	
 	@PostMapping(value = "/submitform", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<String> saveData(@RequestHeader("Authorization") String tokenHeader,@ModelAttribute IdcardDTO dto)
@@ -85,7 +84,7 @@ public class Idcardcontroller {
 			String response = idcardService.saveIdcard(tokenHeader,dto);
 	        return ResponseEntity.ok(response);
 		} catch (Exception e) {
-		return ResponseEntity.status(500).body("Failed to save data: " + e.getMessage());
+			return ResponseEntity.status(500).body("Failed to save data: " + e.getMessage());
 		}
 	}
 	
@@ -94,27 +93,27 @@ public class Idcardcontroller {
 //		return new ResponseEntity<>(formlabelsService.getAllFormLabels(), HttpStatus.OK);
 //	}
 	
-	@GetMapping("/all")
-	public ResponseEntity<List<IdcardGetDTO>> getAllIdCards() {   
-	    return new ResponseEntity<>(idcardService.getAllIdCards(), HttpStatus.OK);
+	@GetMapping("/getCardDetailsById/{id}")
+	public ResponseEntity<IdcardGetDTO> getCardDetailsById(@PathVariable("id") Long id) {   
+	    return new ResponseEntity<>(idcardService.getCardById(id), HttpStatus.OK);
 	}
 	
-	@GetMapping("/pdf/{id}")
-	public ResponseEntity<?> malePotencyPdf(@PathVariable("id") Long id) throws IOException {
-		try {
-			byte filedata[] = fileService.generatepdf(id);
-			String filename = "empcard(" + id + ").pdf";
-			HttpHeaders headers = new HttpHeaders();
-			headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename);
-
-			return ResponseEntity.ok().headers(headers).contentLength(filedata.length)
-					.contentType(MediaType.APPLICATION_PDF).body(new ByteArrayResource(filedata));
-		} catch (Exception e) {
-			
-		
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-		}
-	}
+//	@GetMapping("/pdf/{id}")
+//	public ResponseEntity<?> malePotencyPdf(@PathVariable("id") Long id) throws IOException {
+//		try {
+//			byte filedata[] = fileService.generatepdf(id);
+//			String filename = "empcard(" + id + ").pdf";
+//			HttpHeaders headers = new HttpHeaders();
+//			headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename);
+//
+//			return ResponseEntity.ok().headers(headers).contentLength(filedata.length)
+//					.contentType(MediaType.APPLICATION_PDF).body(new ByteArrayResource(filedata));
+//		} catch (Exception e) {
+//			
+//		
+//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+//		}
+//	}
 	
 	@GetMapping("/download/{id}/{fileType}")
 	public ResponseEntity<Resource> downloadFile(@PathVariable Long id, @PathVariable String fileType) {

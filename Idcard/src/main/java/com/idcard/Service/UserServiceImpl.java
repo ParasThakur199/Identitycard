@@ -20,6 +20,7 @@ import com.idcard.Repository.UserRepository;
 import com.idcard.enums.Role;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -53,7 +54,7 @@ public class UserServiceImpl implements UserService {
 				password1 != null ? password1 : "6a62655eed819ce425894c0c3a18bd7dd469d5b6ce7835fff8b0cb064a129f06");
 		user.setFirstName(userRequestDto.getFirstName());
 		user.setLastName(userRequestDto.getLastName());
-		user.setRole(Role.User);
+		user.setRole(userRequestDto.getRole());
 		
 		
 		// sendUserIdAndPasswordForStaging(userRequestDto.getMobile(),userRequestDto.getEmail(),passwordGenerate);
@@ -89,6 +90,8 @@ public class UserServiceImpl implements UserService {
 		message.setText(sms_msg);
 		mailSender.send(message);
 	}
+
+	
 
 //	private void sendUserIdAndPasswordForStaging(String mobile, String userid, String password) {
 //		String sms_msg = "Your credential " + userid + " with password " + password + " created on Portal " + serverurl

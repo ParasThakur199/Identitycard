@@ -32,10 +32,13 @@ public class IdcardGetDTO {
     private String bloodgroup;
     private String mobile;
     private String officeaddress;
+    private String cardStatus;
 //    private String branch;
 //    private String department;
 //    private String remarks;
 //    private String language;
+    private String createUser;
+    private String createDate;
     private byte[] photo;
     private byte[] signature1;
     private byte[] signature2;

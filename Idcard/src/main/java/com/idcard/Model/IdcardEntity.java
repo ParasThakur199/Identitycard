@@ -1,4 +1,6 @@
 package com.idcard.Model;
+import java.util.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,7 +28,7 @@ public class IdcardEntity {
     private String designation;
     private String empcode;
     private String postingplace;
-	private String issuedate;
+	private Date issuedate;
     private String validupto;
     private String dob;
     private String identificationmark;
@@ -37,10 +39,15 @@ public class IdcardEntity {
     private String bloodgroup;
     private String mobile;
     private String officeaddress;
-//    private String branch;
-//    private String department;
-//    private String remarks;
-//    private String language;
+    @Column(name="cardstatus",length = 1)
+    private String cardStatus;
+    
+    @Column(name = "createuser", length = 50)
+    private String createUser;
+    private Date createDate;
+    @Column(name = "changeuser", length = 50)
+    private String changeUser;
+    private Date changeDate;
     
     @Lob
     private byte[] photo;

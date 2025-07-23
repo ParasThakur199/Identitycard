@@ -1,12 +1,14 @@
 package com.idcard.Model;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.idcard.config.RefreshTokenEntity;
 import com.idcard.enums.Role;
 
 import jakarta.persistence.Column;
@@ -16,6 +18,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -37,7 +40,19 @@ public class UserEntity implements UserDetails{
 	@Column(unique = true)
 	private String mobile;
 	@Enumerated(EnumType.STRING)
-    private Role role = Role.User;
+    private Role role;
+	
+	@Column(name = "createuser", length = 50)
+    private String createUser;
+    private Date createDate;
+    @Column(name = "changeuser", length = 50)
+    private String changeUser;
+    private Date changeDate;
+    @Column(name = "ipaddress", length = 100)
+    private String ipaddress;
+    @OneToOne(mappedBy = "user")
+    private RefreshTokenEntity refreshEntity;
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return List.of(new SimpleGrantedAuthority(role.name()));

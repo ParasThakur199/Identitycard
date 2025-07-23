@@ -27,8 +27,10 @@ public class SecurityConfiguration {
 	        http.csrf((csrf) -> csrf.disable())
 	            .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource()))
 	            .authorizeHttpRequests((requests) -> requests
+	            	.requestMatchers("/alluser/**").permitAll()
 	                .requestMatchers("/login").permitAll() // Allow access to login
 	                .requestMatchers("/user/**").permitAll() // Allow access to user endpoints
+	                .requestMatchers("/admin/**").permitAll()
 	                .anyRequest().permitAll()) // Allow access to all other requests
 	            .sessionManagement((sessionManagement) -> sessionManagement
 	                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

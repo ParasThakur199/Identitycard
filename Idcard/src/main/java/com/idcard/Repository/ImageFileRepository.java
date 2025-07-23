@@ -12,12 +12,10 @@ public interface ImageFileRepository extends JpaRepository<ImageFileEntity, Long
 
 	Optional<ImageFileEntity> findByIdAndFileType(long l, String flagType);
 
-
-	
 	Optional<ImageFileEntity> findById(Long id);
 
 
-	@Query("select e from ImageFileEntity e where e.status = ?1 and e.createUser = ?2")
-	List<ImageFileEntity> findByStatusAndCreateUser(boolean b, String userId);
+	@Query("select e from ImageFileEntity e where e.status = ?1")
+	List<ImageFileEntity> findByStatus(boolean b);
 
 }

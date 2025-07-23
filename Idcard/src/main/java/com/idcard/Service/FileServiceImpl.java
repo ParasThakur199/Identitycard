@@ -1,5 +1,6 @@
 package com.idcard.Service;
 
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import com.idcard.CommonData.Juleandate;
 import com.idcard.Model.IdcardEntity;
 import com.idcard.Repository.IdCardRepository;
 
@@ -152,14 +154,14 @@ public class FileServiceImpl implements FileService {
 
 			Cell leftHeader = new Cell()
 			        .add(new Paragraph("भारत सरकार").setFont(hindiFont).setFontSize(11).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
-			        .add(new Paragraph("Government of India").setFontSize(9).setFont(bold).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
 			        .add(new Paragraph("इलेक्ट्रॉनिक्स और आईटी मंत्रालय").setFont(hindiFont).setFontSize(10).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
-			        .add(new Paragraph("Ministry of Electronics and IT").setFontSize(9).setFont(bold).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER));
-//			leftHeader.setBorder(Border.NO_BORDER);
-			leftHeader.setBorderTop(Border.NO_BORDER)
-		    .setBorderLeft(Border.NO_BORDER)
-		    .setBorderRight(Border.NO_BORDER)
-		    .setBorderBottom(new SolidBorder(1));
+			        .add(new Paragraph("राष्ट्रीय सूचना विज्ञान केंद्र").setFont(hindiFont).setFontSize(11).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
+			        .add(new Paragraph("हरियाणा राज्य केंद्र").setFont(hindiFont).setFontSize(11).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER));
+			leftHeader.setBorder(Border.NO_BORDER);
+//			leftHeader.setBorderTop(Border.NO_BORDER)
+//		    .setBorderLeft(Border.NO_BORDER)
+//		    .setBorderRight(Border.NO_BORDER)
+//		    .setBorderBottom(new SolidBorder(1));
 			headerTable.addCell(leftHeader);
 			
 			if (entity.getLogo() != null) {
@@ -169,35 +171,36 @@ public class FileServiceImpl implements FileService {
 			    logoImage.setHeight(60);
 			    logoImage.setWidth(50);
 			    Cell logoCell = new Cell().add(logoImage).setPadding(5);
-//			    logoCell.setBorder(Border.NO_BORDER);
-			    logoCell.setBorderTop(Border.NO_BORDER)
-			    .setBorderLeft(Border.NO_BORDER)
-			    .setBorderRight(Border.NO_BORDER)
-			    .setBorderBottom(new SolidBorder(1));
+			    logoCell.setBorder(Border.NO_BORDER);
+//			    logoCell.setBorderTop(Border.NO_BORDER)
+//			    .setBorderLeft(Border.NO_BORDER)
+//			    .setBorderRight(Border.NO_BORDER)
+//			    .setBorderBottom(new SolidBorder(1));
 			    headerTable.addCell(logoCell);
 			} else {
 			    // Fallback if logo is missing
 			    Cell logoCell = new Cell().add(new Paragraph("LOGO\nNOT FOUND")
 			        .setTextAlignment(TextAlignment.CENTER)
 			        .setFontSize(8)).setPadding(5);
-//			    logoCell.setBorder(Border.NO_BORDER);
-			    logoCell.setBorderTop(Border.NO_BORDER)
-			    .setBorderLeft(Border.NO_BORDER)
-			    .setBorderRight(Border.NO_BORDER)
-			    .setBorderBottom(new SolidBorder(1));
+			    logoCell.setBorder(Border.NO_BORDER);
+//			    logoCell.setBorderTop(Border.NO_BORDER)
+//			    .setBorderLeft(Border.NO_BORDER)
+//			    .setBorderRight(Border.NO_BORDER)
+//			    .setBorderBottom(new SolidBorder(1));
 			    headerTable.addCell(logoCell);
 			}
 
 
 			Cell rightHeader = new Cell()
-					.add(new Paragraph("राष्ट्रीय सूचना विज्ञान केंद्र").setFont(hindiFont).setFontSize(10).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
-					.add(new Paragraph("National Informatics Center").setFontSize(9).setFont(bold).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
-					.add(new Paragraph("नया सचिवालय, हरियाणा, चंडीगढ़").setFont(hindiFont).setFontSize(10).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
-					.add(new Paragraph("New Secretariat Haryana, Chandigarh").setFontSize(9).setFont(bold).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER));
-			rightHeader.setBorderTop(Border.NO_BORDER)
-		    .setBorderLeft(Border.NO_BORDER)
-		    .setBorderRight(Border.NO_BORDER)
-		    .setBorderBottom(new SolidBorder(1));
+					.add(new Paragraph("Government of India").setFontSize(10).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
+					.add(new Paragraph("Ministry of Electronics and IT").setFontSize(10).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
+					.add(new Paragraph("National Informatics Center").setFontSize(10).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
+					.add(new Paragraph("Haryana State Centre").setFontSize(10).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER));
+			rightHeader.setBorder(Border.NO_BORDER);
+//			rightHeader.setBorderTop(Border.NO_BORDER)
+//		    .setBorderLeft(Border.NO_BORDER)
+//		    .setBorderRight(Border.NO_BORDER)
+//		    .setBorderBottom(new SolidBorder(1));
 			headerTable.addCell(rightHeader);
 
 			
@@ -302,12 +305,14 @@ public class FileServiceImpl implements FileService {
 			infoTable.addCell(photoCell);
 
 			// Row 1: Card No
+			if(entity.getCardno()!=null && !entity.getCardno().isEmpty() && !entity.getCardno().isBlank()) {
 			infoTable.addCell(new Cell().add(new Paragraph("कार्ड नंबर / Card No.:")
 			    .setFont(hindiFont).setFontSize(9).setMultipliedLeading(1f).setMargin(0))
 			    .setBorder(Border.NO_BORDER));
 			infoTable.addCell(new Cell().add(new Paragraph(entity.getCardno())
 			    .setFontSize(9).setMultipliedLeading(1f).setMargin(0))
 			    .setBorder(Border.NO_BORDER));
+			}
 
 			// Row 2: Name
 			infoTable.addCell(new Cell().add(new Paragraph("नाम / Name:")
@@ -428,15 +433,15 @@ public class FileServiceImpl implements FileService {
 			Table footerTable = new Table(footerWidths);
 			footerTable.setWidth(UnitValue.createPercentValue(100));
 			
-			String issueDate = entity.getIssuedate();
+			Date issueDate = entity.getIssuedate();
 			String validUptoDate = entity.getValidupto();
 			String dobDate = entity.getDob();
 			
 			DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // assuming your DB stores in yyyy-MM-dd
 			DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-			LocalDate issueLocalDate = LocalDate.parse(issueDate, inputFormatter);
-			String formattedIssueDate = outputFormatter.format(issueLocalDate);
+//			LocalDate issueLocalDate = LocalDate.parse(issueDate, inputFormatter);
+//			String formattedIssueDate = outputFormatter.format(issueLocalDate);
 
 			LocalDate validUptoLocalDate = LocalDate.parse(validUptoDate, inputFormatter);
 			String formattedValidUptoDate = outputFormatter.format(validUptoLocalDate);
@@ -449,7 +454,7 @@ public class FileServiceImpl implements FileService {
 						Cell detailsCell1 = new Cell().setBorder(Border.NO_BORDER);
 						detailsCell1.add(new Paragraph()
 							    .add(new Text("जारी करने की तिथि / Issue Date:    ").setFont(hindiFont))
-							    .add(new Text(formattedIssueDate).setFontSize(10))
+							    .add(new Text(Juleandate.getDatetoString(issueDate)).setFontSize(10))
 							    .setMarginTop(0).setMarginBottom(0));
 						detailsCell1.add(new Paragraph().add(new Text("वैधता तिथि / Valid Upto:    ").setFont(hindiFont))
 								.add(new Text(formattedValidUptoDate)).setFontSize(10).setMultipliedLeading(1f)

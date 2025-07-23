@@ -24,10 +24,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.spring.medleaper.OtpGenrationDTO.EmailRequestDTO;
-import com.spring.medleaper.OtpGenrationDTO.SandesResponseWrapper;
-import com.spring.medleaper.OtpGenrationDTO.SmsRequestDTO;
-import com.spring.medleaper.exception.ResourceNotFoundException;
+import com.idcard.Payload.EmailRequestDTO;
 
 import jakarta.mail.Authenticator;
 import jakarta.mail.Message;
@@ -57,35 +54,36 @@ public class SMS_Staging {
 	private static final String SMTP_AUTH_PWD = "Medleapr@2024#"; // Password
 	// Sandesh Message using medLEaPR API
 
-	@Async
-	public void sendSandeshMessageMedLEaPR(@Valid String mobile, String message) {
-		try {
-			String url = dbUrl + "/send?receiverid=" + mobile + "&msg=" + message;
-			restTemplate.getForEntity(url, SandesResponseWrapper.class);
-		} catch (Exception e) {
-		}
-
-	}
+//	@Async
+//	public void sendSandeshMessageMedLEaPR(@Valid String mobile, String message) {
+//		try {
+//			String url = dbUrl + "/send?receiverid=" + mobile + "&msg=" + message;
+//			restTemplate.getForEntity(url, SandesResponseWrapper.class);
+//		} catch (Exception e) {
+//		}
+//
+//	}
 
 	public String sendMobileSMS(String mobilenumber, String msg, String templateID) {
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		// msg set to template
-		SmsRequestDTO request = new SmsRequestDTO();
-		request.setAppname("Medleapr");
-		request.setDlt_template_id_user_creation(templateID);
-		request.setHashKey("c76adc17fb7b25a93da25ad0b65692b3592027c06c34ce35246270d704d864f1");
-		request.setMessage(msg);
-		request.setMobilenumber(mobilenumber);
-		HttpEntity<SmsRequestDTO> requestEntity = new HttpEntity<>(request, headers);
-		// send msg to mobile number ------
-		ResponseEntity<String> responseEntity = restTemplate
-				.postForEntity("http://android.dpmuhry.gov.in/api/SMSMsgSender/SendSMS", requestEntity, String.class);
-		if (responseEntity.getStatusCode().is2xxSuccessful()) {
-			return "Successfully Send!";
-		} else {
-			throw new ResourceNotFoundException("Unable to send MSG " + mobilenumber);
-		}
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.setContentType(MediaType.APPLICATION_JSON);
+//		// msg set to template
+//		SmsRequestDTO request = new SmsRequestDTO();
+//		request.setAppname("Medleapr");
+//		request.setDlt_template_id_user_creation(templateID);
+//		request.setHashKey("c76adc17fb7b25a93da25ad0b65692b3592027c06c34ce35246270d704d864f1");
+//		request.setMessage(msg);
+//		request.setMobilenumber(mobilenumber);
+//		HttpEntity<SmsRequestDTO> requestEntity = new HttpEntity<>(request, headers);
+//		// send msg to mobile number ------
+//		ResponseEntity<String> responseEntity = restTemplate
+//				.postForEntity("http://android.dpmuhry.gov.in/api/SMSMsgSender/SendSMS", requestEntity, String.class);
+//		if (responseEntity.getStatusCode().is2xxSuccessful()) {
+//			return "Successfully Send!";
+//		} else {
+//			throw new ResourceNotFoundException("Unable to send MSG " + mobilenumber);
+//		}
+		return null;
 	}
 
 	@Async

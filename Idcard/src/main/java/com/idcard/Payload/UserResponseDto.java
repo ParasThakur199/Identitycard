@@ -20,5 +20,5 @@ public class UserResponseDto {
 	 private String lastName;
 	 private String email;
 	 private String mobile;
-	 private final Role role = Role.User;	
+	 private String role;	
 }

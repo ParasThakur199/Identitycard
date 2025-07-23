@@ -20,12 +20,8 @@ import com.idcard.Service.UserService;
 public class UserController {
 	@Autowired
 	private UserService userService;
-
-	@GetMapping("/test")
-	public String test() {
-		return "test";
-	}
-
+	
+	
 	@PostMapping
 	public ResponseEntity<UserResponseDto> addUser(@RequestBody UserRequestDto userRequestDto) throws IOException {
 		return new ResponseEntity<>(userService.addUser(userRequestDto), HttpStatus.CREATED);
