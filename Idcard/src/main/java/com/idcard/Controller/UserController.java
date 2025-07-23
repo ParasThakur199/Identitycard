@@ -16,13 +16,13 @@ import com.idcard.Payload.UserResponseDto;
 import com.idcard.Service.UserService;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/alluser")
 public class UserController {
 	@Autowired
 	private UserService userService;
 	
 	
-	@PostMapping
+	@PostMapping("/register")
 	public ResponseEntity<UserResponseDto> addUser(@RequestBody UserRequestDto userRequestDto) throws IOException {
 		return new ResponseEntity<>(userService.addUser(userRequestDto), HttpStatus.CREATED);
 	}

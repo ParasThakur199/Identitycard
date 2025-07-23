@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
 		String sms_msg = "Your credential " + toemail + " with password " + pwd + " created on Portal " + serverurl
 				+ ". -MedLEaPR";
 		SimpleMailMessage message = new SimpleMailMessage();
-		message.setFrom("hellosanjay10@gmail.com"); // must match spring.mail.username
+		message.setFrom("hellosanjay10@gmail.com"); //username
 		message.setTo(toemail);
 		message.setSubject("Credentials");
 		message.setText(sms_msg);

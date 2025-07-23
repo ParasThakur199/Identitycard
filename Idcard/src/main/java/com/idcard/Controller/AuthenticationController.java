@@ -14,7 +14,7 @@ import com.idcard.Service.AuthenticationService;
 
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/auth")
 public class AuthenticationController {
 	@Autowired
     private AuthenticationService authenticationService;

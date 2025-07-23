@@ -28,6 +28,7 @@ public class SecurityConfiguration {
 	            .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource()))
 	            .authorizeHttpRequests((requests) -> requests
 	            	.requestMatchers("/alluser/**").permitAll()
+	            	.requestMatchers("/auth/**").permitAll()
 	                .requestMatchers("/login").permitAll() // Allow access to login
 	                .requestMatchers("/user/**").permitAll() // Allow access to user endpoints
 	                .requestMatchers("/admin/**").permitAll()

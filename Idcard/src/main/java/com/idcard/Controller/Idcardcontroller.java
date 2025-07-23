@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 //import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,6 +44,7 @@ import com.idcard.Service.LabelService;
 
 @RestController
 @CrossOrigin
+@RequestMapping("/user")
 public class Idcardcontroller {
 	
 	@Autowired
@@ -61,20 +63,20 @@ public class Idcardcontroller {
 	@Autowired
     private LabelService labelService;
 
-    @PostMapping("/labelSubmit")
-    public ResponseEntity<String> submitLabels(@RequestBody FullSubmitRequest request) {
-        try {
-			labelService.saveLabelsFromBlocks(request);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-        return ResponseEntity.ok("Labels saved successfully.");
-    }
-    
-    @GetMapping("/allLabels")
-    public ResponseEntity<List<LabelGetDTO>> getAllLabels() {
-    	return new ResponseEntity<>(labelService.getAllLabels(), HttpStatus.OK);
-    }
+//    @PostMapping("/labelSubmit")
+//    public ResponseEntity<String> submitLabels(@RequestBody FullSubmitRequest request) {
+//        try {
+//			labelService.saveLabelsFromBlocks(request);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//        return ResponseEntity.ok("Labels saved successfully.");
+//    }
+//    
+//    @GetMapping("/allLabels")
+//    public ResponseEntity<List<LabelGetDTO>> getAllLabels() {
+//    	return new ResponseEntity<>(labelService.getAllLabels(), HttpStatus.OK);
+//    }
     
 	
 	@PostMapping(value = "/submitform", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -88,32 +90,12 @@ public class Idcardcontroller {
 		}
 	}
 	
-//	@GetMapping("/getAllFormLabels/{stateCode}")
-//	public ResponseEntity<List<FormLabelsDTO>> getAllLabels(){
-//		return new ResponseEntity<>(formlabelsService.getAllFormLabels(), HttpStatus.OK);
-//	}
 	
 	@GetMapping("/getCardDetailsById/{id}")
 	public ResponseEntity<IdcardGetDTO> getCardDetailsById(@PathVariable("id") Long id) {   
 	    return new ResponseEntity<>(idcardService.getCardById(id), HttpStatus.OK);
 	}
 	
-//	@GetMapping("/pdf/{id}")
-//	public ResponseEntity<?> malePotencyPdf(@PathVariable("id") Long id) throws IOException {
-//		try {
-//			byte filedata[] = fileService.generatepdf(id);
-//			String filename = "empcard(" + id + ").pdf";
-//			HttpHeaders headers = new HttpHeaders();
-//			headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename);
-//
-//			return ResponseEntity.ok().headers(headers).contentLength(filedata.length)
-//					.contentType(MediaType.APPLICATION_PDF).body(new ByteArrayResource(filedata));
-//		} catch (Exception e) {
-//			
-//		
-//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-//		}
-//	}
 	
 	@GetMapping("/download/{id}/{fileType}")
 	public ResponseEntity<Resource> downloadFile(@PathVariable Long id, @PathVariable String fileType) {

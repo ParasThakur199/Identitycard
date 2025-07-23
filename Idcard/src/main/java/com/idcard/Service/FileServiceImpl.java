@@ -157,11 +157,11 @@ public class FileServiceImpl implements FileService {
 			        .add(new Paragraph("इलेक्ट्रॉनिक्स और आईटी मंत्रालय").setFont(hindiFont).setFontSize(10).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
 			        .add(new Paragraph("राष्ट्रीय सूचना विज्ञान केंद्र").setFont(hindiFont).setFontSize(11).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
 			        .add(new Paragraph("हरियाणा राज्य केंद्र").setFont(hindiFont).setFontSize(11).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER));
-			leftHeader.setBorder(Border.NO_BORDER);
-//			leftHeader.setBorderTop(Border.NO_BORDER)
-//		    .setBorderLeft(Border.NO_BORDER)
-//		    .setBorderRight(Border.NO_BORDER)
-//		    .setBorderBottom(new SolidBorder(1));
+//			leftHeader.setBorder(Border.NO_BORDER);
+			leftHeader.setBorderTop(Border.NO_BORDER)
+		    .setBorderLeft(Border.NO_BORDER)
+		    .setBorderRight(Border.NO_BORDER)
+		    .setBorderBottom(new SolidBorder(1));
 			headerTable.addCell(leftHeader);
 			
 			if (entity.getLogo() != null) {
@@ -171,22 +171,22 @@ public class FileServiceImpl implements FileService {
 			    logoImage.setHeight(60);
 			    logoImage.setWidth(50);
 			    Cell logoCell = new Cell().add(logoImage).setPadding(5);
-			    logoCell.setBorder(Border.NO_BORDER);
-//			    logoCell.setBorderTop(Border.NO_BORDER)
-//			    .setBorderLeft(Border.NO_BORDER)
-//			    .setBorderRight(Border.NO_BORDER)
-//			    .setBorderBottom(new SolidBorder(1));
+//			    logoCell.setBorder(Border.NO_BORDER);
+			    logoCell.setBorderTop(Border.NO_BORDER)
+			    .setBorderLeft(Border.NO_BORDER)
+			    .setBorderRight(Border.NO_BORDER)
+			    .setBorderBottom(new SolidBorder(1));
 			    headerTable.addCell(logoCell);
 			} else {
 			    // Fallback if logo is missing
 			    Cell logoCell = new Cell().add(new Paragraph("LOGO\nNOT FOUND")
 			        .setTextAlignment(TextAlignment.CENTER)
 			        .setFontSize(8)).setPadding(5);
-			    logoCell.setBorder(Border.NO_BORDER);
-//			    logoCell.setBorderTop(Border.NO_BORDER)
-//			    .setBorderLeft(Border.NO_BORDER)
-//			    .setBorderRight(Border.NO_BORDER)
-//			    .setBorderBottom(new SolidBorder(1));
+//			    logoCell.setBorder(Border.NO_BORDER);
+			    logoCell.setBorderTop(Border.NO_BORDER)
+			    .setBorderLeft(Border.NO_BORDER)
+			    .setBorderRight(Border.NO_BORDER)
+			    .setBorderBottom(new SolidBorder(1));
 			    headerTable.addCell(logoCell);
 			}
 
@@ -196,11 +196,11 @@ public class FileServiceImpl implements FileService {
 					.add(new Paragraph("Ministry of Electronics and IT").setFontSize(10).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
 					.add(new Paragraph("National Informatics Center").setFontSize(10).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER))
 					.add(new Paragraph("Haryana State Centre").setFontSize(10).setMultipliedLeading(1f).setMarginTop(0).setMarginBottom(0).setTextAlignment(TextAlignment.CENTER));
-			rightHeader.setBorder(Border.NO_BORDER);
-//			rightHeader.setBorderTop(Border.NO_BORDER)
-//		    .setBorderLeft(Border.NO_BORDER)
-//		    .setBorderRight(Border.NO_BORDER)
-//		    .setBorderBottom(new SolidBorder(1));
+//			rightHeader.setBorder(Border.NO_BORDER);
+			rightHeader.setBorderTop(Border.NO_BORDER)
+		    .setBorderLeft(Border.NO_BORDER)
+		    .setBorderRight(Border.NO_BORDER)
+		    .setBorderBottom(new SolidBorder(1));
 			headerTable.addCell(rightHeader);
 
 			
