@@ -23,7 +23,7 @@ public class UserController {
 	
 	
 	@PostMapping("/register")
-	public ResponseEntity<UserResponseDto> addUser(@RequestBody UserRequestDto userRequestDto) throws IOException {
+	public ResponseEntity<UserResponseDto> addUser(@RequestBody UserRequestDto userRequestDto) {
 		return new ResponseEntity<>(userService.addUser(userRequestDto), HttpStatus.CREATED);
 	}
 }

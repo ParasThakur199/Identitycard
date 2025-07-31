@@ -54,7 +54,7 @@ public class IdcardDTO {
     private String emergencycontactno;
 
     @NotBlank(message = "Address is required")
-    @Size(max = 50, message = "Address must be at most 50 characters")
+    @Size(max = 1000, message = "Address must be at most 1000 characters")
     private String address;
 
     @NotBlank(message = "Height is required")
@@ -70,7 +70,7 @@ public class IdcardDTO {
     private String mobile;
 
     @NotBlank(message = "Office address is required")
-    @Size(max = 50, message = "Office address must be at most 50 characters")
+    @Size(max = 1000, message = "Office address must be at most 1000 characters")
     private String officeaddress;
 
 //    @NotBlank(message = "Branch is required")

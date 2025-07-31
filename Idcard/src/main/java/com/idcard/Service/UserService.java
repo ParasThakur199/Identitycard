@@ -9,7 +9,7 @@ import jakarta.validation.Valid;
 
 
 public interface UserService {
-	 public UserResponseDto addUser(UserRequestDto userRequestDto) throws IOException;
+	 public UserResponseDto addUser(UserRequestDto userRequestDto);
 
 	 
 }
